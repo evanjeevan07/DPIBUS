@@ -1,22 +1,16 @@
+
 <!DOCTYPE html>
 <html lang="ta">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
-    <!-- நீங்கள் வழங்கிய புதிய மெட்டா டேக்குகள் இங்கே சேர்க்கப்பட்டுள்ளன -->
     <!-- Primary Meta Tags -->
     <title>MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes</title>
     <meta name="title" content="MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes">
     <meta name="description" content="Track your local buses in real-time with MyBus. Check accurate bus timings, routes, and arrival updates for your city. Built with secure, fast, and mobile-friendly technology.">
-
-    <!-- Keywords for SEO -->
     <meta name="keywords" content="local bus tracking, real time bus timings, city bus live tracking, bus routes, MyBus app, EVS bus tracking, public transport tracker, bus schedule live, Tamil Nadu bus timing, MyBus real-time updates">
-
-    <!-- Author -->
     <meta name="author" content="EVS - MyBus Developer">
-
-    <!-- Robots -->
     <meta name="robots" content="index, follow">
     <meta name="googlebot" content="index, follow">
 
@@ -60,8 +54,7 @@
       }
     }
     </script>
-    <!-- புதிய மெட்டா டேக்குகள் முடிவு -->
-
+    
     <!-- Google Fonts: Teko -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -86,7 +79,6 @@
 
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-      // Firestore இறக்குமதிகளில் doc, setDoc, getDoc ஆகியவற்றை சேர்க்கவும்
       import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
       import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
     
@@ -105,7 +97,6 @@
     
       window.db = db;
       window.auth = auth;
-      // firebase window object-ல் doc, setDoc, getDoc ஆகியவற்றை சேர்க்கவும்
       window.firebase = { collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, setDoc, getDoc };
       window.firebaseAuth = { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut };
     </script>
@@ -135,16 +126,8 @@
         const LanguageContext = createContext();
 
         const translations = {
-            ta: {
-                app_title: "நகரப் பேருந்து", bus_no_prefix: "பேருந்து எண்:", nav_home: "Home", nav_explore: "வழித்தடம்", nav_upload: "பதிவேற்று", nav_profile: "கணக்கு", home_title: "பேருந்தைத் தேடுங்கள்", home_greeting: "முதலில் சில பேருந்து தகவல்களை பதிவேற்றுங்கள்!", home_greeting_ready: "இனிய பயணத்திற்கு வாழ்த்துக்கள்!", label_from: "தொடங்கும் இடம்", label_to: "இறங்கும் இடம்", label_bus_no: "பேருந்து எண்", label_time_period: "நேரப் பகுதி*", label_departure_time: "புறப்படும் நேரம்", btn_show_trip: "பயணத்தைக் காட்டு", loading_text: "தேடுகிறது...", no_trips_found: "தகுந்த பயணங்கள் இல்லை", error_select_locations: "தொடங்கும் மற்றும் இறங்கும் இடத்தைத் தேர்ந்தெடுக்கவும்.", error_no_trip_at_time: "தேர்ந்தெடுக்கப்பட்ட நேரத்திற்குப் பிறகு பேருந்துகள் இல்லை.", error_no_trips_on_route: "இந்த வழித்தடத்தில் பயனர்கள் பதிவேற்றிய பயணங்கள் இல்லை.", explore_title: "வழித்தடங்களைக் கண்டறியவும்", explore_subtitle: "ஊரின் பெயரை உள்ளிட்டு பேருந்துகளைக் கண்டறியவும்.", explore_placeholder: "எ.கா: தர்மபுரி", explore_no_results: "இந்த ஊருக்கு பேருந்துகள் கண்டறியப்படவில்லை.", upload_title: "தரவைப் பதிவேற்றம்", upload_subtitle: "பேருந்துத் தகவல்களைப் பகிர்ந்து சமூகத்திற்கு உதவுங்கள்.", label_busNumber: "பேருந்து எண்*", label_district: "தாலுக்கா", label_startTime: "புறப்படும் நேரம்* (eg: 6:40 AM)", label_endTime: "இறங்கும் நேரம்* (eg: 7:30 AM)", label_duration: "பயண நேரம்* (எ.கா: 50 நிமிடம்)", label_stops: "நிறுத்தங்கள்*", label_stop_n: (n) => `நிறுத்தம் ${n}`, btn_add_stop: "மேலும் நிறுத்தங்களைச் சேர்க்க", btn_submit: "சமர்ப்பி", time_morning: "காலை", time_afternoon: "மதியம்", time_evening: "மாலை", time_night: "இரவு", card_departure: "புறப்பாடு", card_arrival: "வருகை", card_total_time: "மொத்த நேரம்", next_buses_title: (busNo) => `அடுத்த பேருந்துகள் (எண்: ${busNo})`, tracking_now: "பேருந்து இப்போது:", tracking_near: "அருகில் உள்ளது.", tracking_eta: (loc, time) => `${loc}-க்கு வர இன்னும் சுமார் ${time} நிமிடங்கள் ஆகும்.`, tracking_finished: (loc) => `பயணம் முடிந்தது! பேருந்து ${loc}-ஐ அடைந்துவிட்டது.`, stops_title: "உங்கள் பயண நிறுத்தங்கள்", submit_success: "நன்றி! உங்கள் தகவல் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது.", submit_spam: "இந்தத் தகவல் ஏற்கனவே பலமுறை சமர்ப்பிக்கப்பட்டுள்ளது.", submit_login_required: "பங்களிக்க, தயவுசெய்து உள்நுழையவும்.", duration_min: "நிமி.", duration_hour: "மணி நேரம்", duration_hr: "மணி", label_kilometers: "கிலோமீட்டர்*", card_distance: "தொலைவு", route_removed_success: "வழித்தடம் நீக்கப்பட்டது!", card_ticket_price: "டிக்கெட் விலை", save_route: "வழித்தடத்தைச் சேமி", saved_routes_title: "சேமித்த வழித்தடங்கள்", route_saved_success: "வழித்தடம் சேமிக்கப்பட்டது!", route_already_exists: "இந்த வழித்தடம் ஏற்கனவே சேமிக்கப்பட்டுள்ளது.", no_saved_routes: "நீங்கள் இன்னும் எந்த வழித்தடத்தையும் சேமிக்கவில்லை.", profile_signin_title: "கணக்கைத் தொடங்குங்கள்", profile_signin_subtitle: "உங்கள் பங்களிப்புகளைக் காண உள்நுழையவும்.", btn_signin_google: "Sign in with Google", welcome_back: (name) => `மீண்டும் வருக, ${name}!`, label_email: "மின்னஞ்சல் முகவரி", label_password: "கடவுச்சொல்", btn_login: "உள்நுழை", btn_logout: "வெளியேறு", label_first_name: "முதல் பெயர்", label_last_name: "கடைசி பெயர்", label_confirm_password: "கடவுச்சொல்லை உறுதிப்படுத்தவும்", btn_register: "பதிவு செய்", register_title: "புதிய கணக்கை உருவாக்கு", register_subtitle: "சமூகத்தில் இணைய பதிவு செய்யுங்கள்.", link_to_register: "கணக்கு இல்லையா?", link_to_login: "ஏற்கனவே கணக்கு உள்ளதா?", section_profile: "சுயவிவரம்", section_points_rewards: "புள்ளிகள் & வெகுமதிகள்", section_my_contributions: "என் பங்களிப்புகள்", section_settings: "அமைப்புகள்", section_about: "செயலி பற்றி", section_premium: "பிரீமியம் அம்சங்கள்", total_contributions: "மொத்த பங்களிப்புகள்", total_points: "மொத்த புள்ளிகள்", leaderboard: "முன்னிலை வகிப்பவர்கள்", city_level: "நகர அளவில்", added_on: "சேர்த்த தேதி", no_contributions_yet: "நீங்கள் இதுவரை எந்தத் தகவலையும் பதிவேற்றவில்லை.", dark_mode: "இருண்ட பயன்முறை", language_option: "மொழி", notifications: "அறிவிப்புகள்", btn_edit: "திருத்து", btn_delete: "நீக்கு", delete_confirm_title: "உறுதியாக நீக்கவா?", delete_confirm_text: "இந்தத் தகவலை நிரந்தரமாக நீக்க விரும்புகிறீர்களா?", btn_cancel: "ரத்துசெய்", delete_success: "தகவல் வெற்றிகரமாக நீக்கப்பட்டது.", update_success: "தகவல் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது.", btn_save_changes: "மாற்றங்களைச் சேமி", about_text: "இந்த செயலி, நகரப் பேருந்து நேரங்களைக் கண்டறியவும், புதிய தகவல்களைப் பகிரவும் உருவாக்கப்பட்டது. இது ஒரு சமூக முயற்சி. பயனர்கள் பகிரும் தகவல்களைக் கொண்டே இது இயங்குகிறது.", developed_by: "உருவாக்கியவர்", label_stop_time: "நேரம் (6:50 AM)", label_stop_price: "விலை (₹)", premium_title: "உங்கள் திட்டத்தைத் தேர்ந்தெடுக்கவும்", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "மாதத்திற்கு", premium_btn_choose: "இந்த திட்டத்தைத் தேர்ந்தெடு", premium_selected_info: "நீங்கள் தேர்ந்தெடுத்தது", premium_feature_all: "அனைத்து அம்சங்களும்", premium_feature_occupancy: "பேருந்து கூட்டத் தகவல்", premium_feature_support: "முன்னுரிமை ஆதரவு", premium_feature_ad_free: "விளம்பரமில்லா அனுபவம்",
-                // புதிய மொழிபெயர்ப்புகள்
-                label_role: "உங்கள் பங்கு", role_passenger: "பயணி", role_driver: "ஓட்டுநர்", role_conductor: "நடத்துனர்", section_community_stats: "சமூக புள்ளிவிவரம்",
-            },
-            en: {
-                app_title: "City Bus", bus_no_prefix: "Bus No:", nav_home: "Home", nav_explore: "Explore", nav_upload: "Upload", nav_profile: "Account", home_title: "Search for a Bus", home_greeting: "Upload some bus data to get started!", home_greeting_ready: "Have a great journey!", label_from: "Starting Point", label_to: "Destination", label_bus_no: "Bus Number", label_time_period: "Time Period*", label_departure_time: "Departure Time", btn_show_trip: "Show Trip", loading_text: "Searching...", no_trips_found: "No suitable trips found", error_select_locations: "Please select a starting point and destination.", error_no_trip_at_time: "No buses available after the selected time.", error_no_trips_on_route: "No user-uploaded trips found for this route.", explore_title: "Explore Routes", explore_subtitle: "Enter a location to find buses that pass through.", explore_placeholder: "e.g., Dharmapuri", explore_no_results: "No buses found for this location.", upload_title: "Upload Data", upload_subtitle: "Help the community by sharing bus information.", label_busNumber: "Bus Number*", label_district: "Taluk", label_startTime: "Start Time* (e.g., 6:40 AM)", label_endTime: "End Time* (e.g., 7:30 AM)", label_duration: "Trip Duration* (e.g., 50 min)", label_stops: "Stops*", label_stop_n: (n) => `Stop ${n}`, btn_add_stop: "Add More Stops", btn_submit: "Submit", time_morning: "Morning", time_afternoon: "Afternoon", time_evening: "Evening", time_night: "Night", card_departure: "Departure", card_arrival: "Arrival", card_total_time: "Total Time", next_buses_title: (busNo) => `Next Buses (No: ${busNo})`, tracking_now: "Bus is now at:", tracking_near: "is nearby.", tracking_eta: (loc, time) => `Approx. ${time} minutes to reach ${loc}.`, tracking_finished: (loc) => `Trip finished! The bus has reached ${loc}.`, stops_title: "Your Trip Stops", submit_success: "Thank you! Your information has been submitted successfully.", submit_spam: "This information has already been submitted multiple times.", submit_login_required: "Please log in to contribute.", duration_min: "min", duration_hour: "hour", duration_hr: "hr", label_kilometers: "Kilometers*", card_distance: "Distance", route_removed_success: "Route removed!", card_ticket_price: "Ticket Price", save_route: "Save Route", saved_routes_title: "Saved Routes", route_saved_success: "Route saved!", route_already_exists: "This route is already saved.", no_saved_routes: "You haven't saved any routes yet.", profile_signin_title: "Get Started", profile_signin_subtitle: "Sign in to see your contributions.", btn_signin_google: "Sign in with Google", welcome_back: (name) => `Welcome back, ${name}!`, label_email: "Email Address", label_password: "Password", btn_login: "Login", btn_logout: "Log Out", label_first_name: "First Name", label_last_name: "Last Name", label_confirm_password: "Confirm Password", btn_register: "Register", register_title: "Create a New Account", register_subtitle: "Join the community by registering.", link_to_register: "Don't have an account?", link_to_login: "Already have an account?", section_profile: "Profile", section_points_rewards: "Points & Rewards", section_my_contributions: "My Contributions", section_settings: "Settings", section_about: "About", section_premium: "Premium Features", total_contributions: "Total Contributions", total_points: "Total Points", leaderboard: "Leaderboard", city_level: "City Level", added_on: "Added on", no_contributions_yet: "You haven't uploaded any information yet.", dark_mode: "Dark Mode", language_option: "Language", notifications: "Notifications", btn_edit: "Edit", btn_delete: "Delete", delete_confirm_title: "Confirm Deletion", delete_confirm_text: "Are you sure you want to permanently delete this entry?", btn_cancel: "Cancel", delete_success: "Entry deleted successfully.", update_success: "Entry updated successfully.", btn_save_changes: "Save Changes", about_text: "This application is built to help find city bus timings and share new information. It's a community-driven effort that relies on user contributions.", developed_by: "Developed by", label_stop_time: "Time (6:50 AM)", label_stop_price: "Price (₹)", premium_title: "Choose Your Plan", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "per month", premium_btn_choose: "Choose Plan", premium_selected_info: "You have selected", premium_feature_all: "All features unlocked", premium_feature_occupancy: "Bus Occupancy Info", premium_feature_support: "Priority Support", premium_feature_ad_free: "Ad-Free Experience",
-                // புதிய மொழிபெயர்ப்புகள்
-                label_role: "Your Role", role_passenger: "Passenger", role_driver: "Driver", role_conductor: "Conductor", section_community_stats: "Community Stats",
-            }
+            ta: { app_title: "நகரப் பேருந்து", bus_no_prefix: "பேருந்து எண்:", nav_home: "Home", nav_explore: "வழித்தடம்", nav_upload: "பதிவேற்று", nav_profile: "கணக்கு", home_title: "பேருந்தைத் தேடுங்கள்", home_greeting: "முதலில் சில பேருந்து தகவல்களை பதிவேற்றுங்கள்!", home_greeting_ready: "இனிய பயணத்திற்கு வாழ்த்துக்கள்!", label_from: "தொடங்கும் இடம்", label_to: "இறங்கும் இடம்", label_bus_no: "பேருந்து எண்", label_departure_time: "புறப்படும் நேரம்", btn_show_trip: "பயணத்தைக் காட்டு", loading_text: "தேடுகிறது...", no_trips_found: "தகுந்த பயணங்கள் இல்லை", error_select_locations: "தொடங்கும் மற்றும் இறங்கும் இடத்தைத் தேர்ந்தெடுக்கவும்.", error_no_trip_at_time: "தேர்ந்தெடுக்கப்பட்ட நேரத்திற்குப் பிறகு பேருந்துகள் இல்லை.", error_no_trips_on_route: "இந்த வழித்தடத்தில் பயனர்கள் பதிவேற்றிய பயணங்கள் இல்லை.", explore_title: "வழித்தடங்களைக் கண்டறியவும்", explore_subtitle: "ஊரின் பெயரை உள்ளிட்டு பேருந்துகளைக் கண்டறியவும்.", explore_placeholder: "எ.கா: தர்மபுரி", explore_no_results: "இந்த ஊருக்கு பேருந்துகள் கண்டறியப்படவில்லை.", upload_title: "தரவைப் பதிவேற்றம்", upload_subtitle: "பேருந்துத் தகவல்களைப் பகிர்ந்து சமூகத்திற்கு உதவுங்கள்.", label_busNumber: "பேருந்து எண்*", label_district: "தாலுக்கா", label_stops: "நிறுத்தங்கள்*", label_stop_n: (n) => `நிறுத்தம் ${n}`, btn_add_stop: "மேலும் நிறுத்தங்களைச் சேர்க்க", btn_submit: "சமர்ப்பி", card_departure: "புறப்பாடு", card_arrival: "வருகை", card_total_time: "மொத்த நேரம்", tracking_now: "பேருந்து இப்போது:", tracking_near: "அருகில் உள்ளது.", tracking_eta: (loc, time) => `${loc}-க்கு வர இன்னும் சுமார் ${time} நிமிடங்கள் ஆகும்.`, tracking_finished: (loc) => `பயணம் முடிந்தது! பேருந்து ${loc}-ஐ அடைந்துவிட்டது.`, stops_title: "உங்கள் பயண நிறுத்தங்கள்", submit_success: "நன்றி! உங்கள் தகவல் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது.", submit_login_required: "பங்களிக்க, தயவுசெய்து உள்நுழையவும்.", duration_min: "நிமி.", duration_hour: "மணி நேரம்", duration_hr: "மணி", card_ticket_price: "டிக்கெட் விலை", save_route: "வழித்தடத்தைச் சேமி", saved_routes_title: "சேமித்த வழித்தடங்கள்", route_saved_success: "வழித்தடம் சேமிக்கப்பட்டது!", route_already_exists: "இந்த வழித்தடம் ஏற்கனவே சேமிக்கப்பட்டுள்ளது.", no_saved_routes: "நீங்கள் இன்னும் எந்த வழித்தடத்தையும் சேமிக்கவில்லை.", profile_signin_title: "கணக்கைத் தொடங்குங்கள்", profile_signin_subtitle: "உங்கள் பங்களிப்புகளைக் காண உள்நுழையவும்.", welcome_back: (name) => `மீண்டும் வருக, ${name}!`, label_email: "மின்னஞ்சல் முகவரி", label_password: "கடவுச்சொல்", btn_login: "உள்நுழை", btn_logout: "வெளியேறு", label_first_name: "முதல் பெயர்", label_last_name: "கடைசி பெயர்", label_confirm_password: "கடவுச்சொல்லை உறுதிப்படுத்தவும்", btn_register: "பதிவு செய்", register_title: "புதிய கணக்கை உருவாக்கு", register_subtitle: "சமூகத்தில் இணைய பதிவு செய்யுங்கள்.", link_to_register: "கணக்கு இல்லையா?", link_to_login: "ஏற்கனவே கணக்கு உள்ளதா?", section_profile: "சுயவிவரம்", section_points_rewards: "புள்ளிகள் & வெகுமதிகள்", section_my_contributions: "என் பங்களிப்புகள்", section_settings: "அமைப்புகள்", section_about: "செயலி பற்றி", section_premium: "பிரீமியம் அம்சங்கள்", total_contributions: "மொத்த பங்களிப்புகள்", total_points: "மொத்த புள்ளிகள்", leaderboard: "முன்னிலை வகிப்பவர்கள்", city_level: "நகர அளவில்", added_on: "சேர்த்த தேதி", no_contributions_yet: "நீங்கள் இதுவரை எந்தத் தகவலையும் பதிவேற்றவில்லை.", dark_mode: "இருண்ட பயன்முறை", language_option: "மொழி", notifications: "அறிவிப்புகள்", btn_edit: "திருத்து", btn_delete: "நீக்கு", delete_confirm_title: "உறுதியாக நீக்கவா?", delete_confirm_text: "இந்தத் தகவலை நிரந்தரமாக நீக்க விரும்புகிறீர்களா?", btn_cancel: "ரத்துசெய்", delete_success: "தகவல் வெற்றிகரமாக நீக்கப்பட்டது.", update_success: "தகவல் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது.", btn_save_changes: "மாற்றங்களைச் சேமி", about_text: "இந்த செயலி, நகரப் பேருந்து நேரங்களைக் கண்டறியவும், புதிய தகவல்களைப் பகிரவும் உருவாக்கப்பட்டது. இது ஒரு சமூக முயற்சி. பயனர்கள் பகிரும் தகவல்களைக் கொண்டே இது இயங்குகிறது.", developed_by: "உருவாக்கியவர்", label_stop_time: "நேரம் (6:50 AM)", label_stop_price: "விலை (₹)", premium_title: "உங்கள் திட்டத்தைத் தேர்ந்தெடுக்கவும்", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "மாதத்திற்கு", premium_btn_choose: "இந்த திட்டத்தைத் தேர்ந்தெடு", premium_selected_info: "நீங்கள் தேர்ந்தெடுத்தது", premium_feature_all: "அனைத்து அம்சங்களும்", premium_feature_occupancy: "பேருந்து கூட்டத் தகவல்", premium_feature_support: "முன்னுரிமை ஆதரவு", premium_feature_ad_free: "விளம்பரமில்லா அனுபவம்", label_role: "உங்கள் பங்கு", role_passenger: "பயணி", role_driver: "ஓட்டுநர்", role_conductor: "நடத்துனர்", section_community_stats: "சமூக புள்ளிவிவரம்", unknown_user: "அறியப்படாத பயனர்", section_friends: "நண்பர்கள்", joined_on: "சேர்ந்த தேதி", recent_members: "சமீபத்திய உறுப்பினர்கள்" },
+            en: { app_title: "City Bus", bus_no_prefix: "Bus No:", nav_home: "Home", nav_explore: "Explore", nav_upload: "Upload", nav_profile: "Account", home_title: "Search for a Bus", home_greeting: "Upload some bus data to get started!", home_greeting_ready: "Have a great journey!", label_from: "Starting Point", label_to: "Destination", label_bus_no: "Bus Number", label_departure_time: "Departure Time", btn_show_trip: "Show Trip", loading_text: "Searching...", no_trips_found: "No suitable trips found", error_select_locations: "Please select a starting point and destination.", error_no_trip_at_time: "No buses available after the selected time.", error_no_trips_on_route: "No user-uploaded trips found for this route.", explore_title: "Explore Routes", explore_subtitle: "Enter a location to find buses that pass through.", explore_placeholder: "e.g., Dharmapuri", explore_no_results: "No buses found for this location.", upload_title: "Upload Data", upload_subtitle: "Help the community by sharing bus information.", label_busNumber: "Bus Number*", label_district: "Taluk", label_stops: "Stops*", label_stop_n: (n) => `Stop ${n}`, btn_add_stop: "Add More Stops", btn_submit: "Submit", card_departure: "Departure", card_arrival: "Arrival", card_total_time: "Total Time", tracking_now: "Bus is now at:", tracking_near: "is nearby.", tracking_eta: (loc, time) => `Approx. ${time} minutes to reach ${loc}.`, tracking_finished: (loc) => `Trip finished! The bus has reached ${loc}.`, stops_title: "Your Trip Stops", submit_success: "Thank you! Your information has been submitted successfully.", submit_login_required: "Please log in to contribute.", duration_min: "min", duration_hour: "hour", duration_hr: "hr", card_ticket_price: "Ticket Price", save_route: "Save Route", saved_routes_title: "Saved Routes", route_saved_success: "Route saved!", route_already_exists: "This route is already saved.", no_saved_routes: "You haven't saved any routes yet.", profile_signin_title: "Get Started", profile_signin_subtitle: "Sign in to see your contributions.", welcome_back: (name) => `Welcome back, ${name}!`, label_email: "Email Address", label_password: "Password", btn_login: "Login", btn_logout: "Log Out", label_first_name: "First Name", label_last_name: "Last Name", label_confirm_password: "Confirm Password", btn_register: "Register", register_title: "Create a New Account", register_subtitle: "Join the community by registering.", link_to_register: "Don't have an account?", link_to_login: "Already have an account?", section_profile: "Profile", section_points_rewards: "Points & Rewards", section_my_contributions: "My Contributions", section_settings: "Settings", section_about: "About", section_premium: "Premium Features", total_contributions: "Total Contributions", total_points: "Total Points", leaderboard: "Leaderboard", city_level: "City Level", added_on: "Added on", no_contributions_yet: "You haven't uploaded any information yet.", dark_mode: "Dark Mode", language_option: "Language", notifications: "Notifications", btn_edit: "Edit", btn_delete: "Delete", delete_confirm_title: "Confirm Deletion", delete_confirm_text: "Are you sure you want to permanently delete this entry?", btn_cancel: "Cancel", delete_success: "Entry deleted successfully.", update_success: "Entry updated successfully.", btn_save_changes: "Save Changes", about_text: "This application is built to help find city bus timings and share new information. It's a community-driven effort that relies on user contributions.", developed_by: "Developed by", label_stop_time: "Time (6:50 AM)", label_stop_price: "Price (₹)", premium_title: "Choose Your Plan", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "per month", premium_btn_choose: "Choose Plan", premium_selected_info: "You have selected", premium_feature_all: "All features unlocked", premium_feature_occupancy: "Bus Occupancy Info", premium_feature_support: "Priority Support", premium_feature_ad_free: "Ad-Free Experience", label_role: "Your Role", role_passenger: "Passenger", role_driver: "Driver", role_conductor: "Conductor", section_community_stats: "Community Stats", unknown_user: "Unknown User", section_friends: "Friends", joined_on: "Joined on", recent_members: "Recent Members" }
         };
 
         const formatDuration = (minutes, t) => { if (isNaN(minutes) || minutes < 0) return 'N/A'; if (minutes < 60) return `${minutes} ${t.duration_min}`; if (minutes === 60) return `1 ${t.duration_hour}`; const hours = Math.floor(minutes / 60); const remainingMinutes = minutes % 60; if (remainingMinutes === 0) return `${hours} ${t.duration_hour}`; return `${hours} ${t.duration_hr} ${remainingMinutes} ${t.duration_min}`; };
@@ -155,36 +138,22 @@
         // பகுதி 2: UI கூறுகள் (Components)
         // =================================================================
         
-        //**மாற்றம் 1: புதிய பாதுகாப்பு கூறு (Security Component)**
         function SecuritySetup() {
             useEffect(() => {
-                // Right-click-ஐத் தடுத்தல்
-                const handleContextMenu = (e) => {
-                    e.preventDefault();
-                };
-
-                // Keyboard shortcuts-ஐத் தடுத்தல்
+                const handleContextMenu = (e) => e.preventDefault();
                 const handleKeyDown = (e) => {
-                    if (
-                        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) || // Ctrl+Shift+I/J
-                        (e.ctrlKey && (e.key === 'U' || e.key === 'u')) || // Ctrl+U
-                        e.key === 'F12' // F12
-                    ) {
+                    if ((e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) || (e.ctrlKey && (e.key === 'U' || e.key === 'u')) || e.key === 'F12') {
                         e.preventDefault();
                     }
                 };
-
                 document.addEventListener('contextmenu', handleContextMenu);
                 document.addEventListener('keydown', handleKeyDown);
-
-                // Component unmount ஆகும்போது event listeners-ஐ நீக்குதல்
                 return () => {
                     document.removeEventListener('contextmenu', handleContextMenu);
                     document.removeEventListener('keydown', handleKeyDown);
                 };
             }, []);
-
-            return null; // இந்த கூறு எதையும் திரையில் காட்டாது
+            return null;
         }
 
         function Header({user, darkMode}) {
@@ -426,7 +395,7 @@
             return (
                 <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
                     <div className="flex items-center mb-3">
-                        <ion-icon name={iconName} class="text-xl text-blue-600 mr-3"></ion-icon>
+                        <ion-icon name={iconName} class="text-xl text-blue-600 dark:text-blue-400 mr-3"></ion-icon>
                         <h3 className="text-xl font-semibold text-gray-800 dark:text-slate-200">{title}</h3>
                     </div>
                     {children}
@@ -445,36 +414,6 @@
             );
         }
 
-        function UpcomingTripsCard({ trips, t }) {
-            if (trips.length === 0) return null;
-            return (
-                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg mt-6 animate-fade-in">
-                    <h2 className="text-xl font-semibold text-gray-800 dark:text-slate-200 mb-4">{t.next_buses_title(trips[0]?.busNumber)}</h2>
-                    <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
-                        {trips.map((trip, index) => {
-                            const firstStop = trip.stops?.[0];
-                            const lastStop = trip.stops?.[trip.stops.length - 1];
-                            const duration = lastStop && firstStop ? timeToMinutes(lastStop.time) - timeToMinutes(firstStop.time) : 0;
-                            return (
-                                <div key={index} className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-slate-700/50 rounded-lg border-l-4 border-blue-400">
-                                    <div className="flex items-center">
-                                        <ion-icon name="time-outline" class="text-blue-500 mr-3 text-xl"></ion-icon>
-                                        <div>
-                                            <p className="font-bold text-base text-gray-800 dark:text-slate-200">{firstStop?.time} → {lastStop?.time}</p>
-                                            <p className="text-sm text-gray-600 dark:text-slate-400">
-                                                {firstStop?.name} → {lastStop?.name}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <span className="text-sm font-semibold text-gray-500 dark:text-slate-300">{formatDuration(duration, t)}</span>
-                                </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            );
-        }
-        
         function ProfileListItem({ iconName, title, onClick }) {
             return (
                 <button onClick={onClick} className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200 shadow-sm border dark:border-slate-700/50">
@@ -515,25 +454,10 @@
             const [startPoint, setStartPoint] = useState("");
             const [endPoint, setEndPoint] = useState("");
             const [busNumber, setBusNumber] = useState("");
-            const [timeSlot, setTimeSlot] = useState(t.time_morning);
             const [specificTime, setSpecificTime] = useState("");
             const [departureTimes, setDepartureTimes] = useState([]);
-            const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
-            const timeDropdownRef = useRef(null);
 
             const allStops = useMemo(() => [...new Set(allBusData.flatMap(trip => trip.stops?.map(stop => stop.name) || []))], [allBusData]);
-            
-            useEffect(() => { setTimeSlot(t.time_morning); }, [t]);
-            
-            useEffect(() => {
-                function handleClickOutside(event) {
-                    if (timeDropdownRef.current && !timeDropdownRef.current.contains(event.target)) {
-                        setIsTimeDropdownOpen(false);
-                    }
-                }
-                document.addEventListener("mousedown", handleClickOutside);
-                return () => document.removeEventListener("mousedown", handleClickOutside);
-            }, [timeDropdownRef]);
 
             useEffect(() => {
                 if (!startPoint || !endPoint || !busNumber || startPoint === endPoint) {
@@ -544,14 +468,11 @@
 
                 const filteredTrips = allBusData.filter(trip => {
                     if (!trip.busNumber || !trip.stops || trip.stops.length === 0) return false;
-                    
                     const busMatch = trip.busNumber.toUpperCase() === busNumber.trim().toUpperCase();
                     const stopNames = trip.stops.map(s => s.name);
                     const startIndex = stopNames.indexOf(startPoint);
                     const endIndex = stopNames.indexOf(endPoint);
-                    const routeMatch = startIndex !== -1 && endIndex !== -1 && startIndex < endIndex;
-
-                    return busMatch && routeMatch;
+                    return busMatch && startIndex !== -1 && endIndex !== -1 && startIndex < endIndex;
                 });
                 
                 const times = [...new Set(filteredTrips.map(trip => trip.stops[0]?.time).filter(Boolean))];
@@ -563,9 +484,8 @@
                 }
             }, [startPoint, endPoint, busNumber, allBusData]);
         
-            const handleFormSubmit = (e) => { e.preventDefault(); onSearch({ startPoint, endPoint, busNumber, timeSlot, specificTime }); };
+            const handleFormSubmit = (e) => { e.preventDefault(); onSearch({ startPoint, endPoint, busNumber, specificTime }); };
             const handleSwapLocations = () => { const temp = startPoint; setStartPoint(endPoint); setEndPoint(temp); };
-            const handleTimeSelect = (selectedTime) => { setTimeSlot(selectedTime); setIsTimeDropdownOpen(false); };
 
             return (
                 <div className="animate-fade-in">
@@ -711,7 +631,7 @@
             const getInitialFormState = () => ({
                 busNumber: initialData?.busNumber || '',
                 district: initialData?.district || '',
-                stops: initialData?.stops?.length > 0 ? initialData.stops : [{ name: '', time: '', price: '' }],
+                stops: initialData?.stops?.length > 0 ? initialData.stops.map(s => ({...s, price: s.price || ''})) : [{ name: '', time: '', price: '' }],
             });
 
             const [formData, setFormData] = useState(getInitialFormState);
@@ -759,38 +679,17 @@
                     <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
                         <form onSubmit={handleSubmit} className="space-y-6">
                              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
-                                <AutocompleteInput
-                                    id="busNumber"
-                                    label={t.label_busNumber}
-                                    value={formData.busNumber || ''}
-                                    onChange={(value) => handleAutocompleteChange('busNumber', value)}
-                                    suggestions={suggestions.busNumbers}
-                                    required
-                                />
-                                <TalukAutocompleteInput
-                                    id="district"
-                                    label={t.label_district}
-                                    value={formData.district || ''}
-                                    onChange={(value) => handleAutocompleteChange('district', value)}
-                                    talukList={dharmapuriTaluks}
-                                    language={language}
-                                    required
-                                />
+                                <AutocompleteInput id="busNumber" label={t.label_busNumber} value={formData.busNumber || ''} onChange={(value) => handleAutocompleteChange('busNumber', value)} suggestions={suggestions.busNumbers} required />
+                                <TalukAutocompleteInput id="district" label={t.label_district} value={formData.district || ''} onChange={(value) => handleAutocompleteChange('district', value)} talukList={dharmapuriTaluks} language={language} required />
                             </div>
                            
                             <div className="space-y-4">
                                 <label className="text-base font-medium text-gray-700 dark:text-slate-300">{t.label_stops}</label>
                                 {formData.stops.map((stop, index) => (
                                     <div key={index} className="grid grid-cols-12 gap-2 items-center py-2 rounded-lg">
-                                        <div className="col-span-12 md:col-span-5">
-                                            <AutocompleteInput id={`stop_name_${index}`} label={t.label_stop_n(index + 1)} value={stop.name} onChange={(value) => handleStopChange(index, 'name', value)} suggestions={suggestions.stopNames} required />
-                                        </div>
-                                        <div className="col-span-6 md:col-span-3">
-                                             <AutocompleteInput id={`stop_time_${index}`} label={t.label_stop_time} value={stop.time} onChange={(value) => handleStopChange(index, 'time', value)} suggestions={suggestions.times} required />
-                                        </div>
-                                        <div className="col-span-5 md:col-span-3">
-                                            <AutocompleteInput id={`stop_price_${index}`} label={t.label_stop_price} type="number" value={stop.price} onChange={(value) => handleStopChange(index, 'price', value)} suggestions={suggestions.prices} required />
-                                        </div>
+                                        <div className="col-span-12 md:col-span-5"><AutocompleteInput id={`stop_name_${index}`} label={t.label_stop_n(index + 1)} value={stop.name} onChange={(value) => handleStopChange(index, 'name', value)} suggestions={suggestions.stopNames} required /></div>
+                                        <div className="col-span-6 md:col-span-3"><AutocompleteInput id={`stop_time_${index}`} label={t.label_stop_time} value={stop.time} onChange={(value) => handleStopChange(index, 'time', value)} suggestions={suggestions.times} required /></div>
+                                        <div className="col-span-5 md:col-span-3"><AutocompleteInput id={`stop_price_${index}`} label={t.label_stop_price} type="number" value={stop.price} onChange={(value) => handleStopChange(index, 'price', value)} suggestions={suggestions.prices} required /></div>
                                         <div className="col-span-1 flex justify-center">{formData.stops.length > 1 && (<button type="button" onClick={() => removeStopInput(index)} className="text-red-500 hover:text-red-700"><ion-icon name="remove-circle" className="text-xl"></ion-icon></button>)}</div>
                                     </div>
                                 ))}
@@ -894,63 +793,70 @@
         function PremiumPage({ onBack }) {
             const { t } = useContext(LanguageContext);
             const [selectedPlan, setSelectedPlan] = useState('pro');
-
-            const plans = {
-                basic: { id: 'basic', title: t.premium_plan_3_title, price: 25, color: 'from-green-500 to-emerald-500' },
-                saver: { id: 'saver', title: t.premium_plan_1_title, price: 45, color: 'from-sky-500 to-indigo-500' },
-                pro: { id: 'pro', title: t.premium_plan_2_title, price: 99, color: 'from-purple-600 to-violet-700' }
-            };
-
+            const plans = { basic: { id: 'basic', title: t.premium_plan_3_title, price: 25, color: 'from-green-500 to-emerald-500' }, saver: { id: 'saver', title: t.premium_plan_1_title, price: 45, color: 'from-sky-500 to-indigo-500' }, pro: { id: 'pro', title: t.premium_plan_2_title, price: 99, color: 'from-purple-600 to-violet-700' } };
             const selectedPlanData = plans[selectedPlan];
-            
             const PlanCard = ({ plan, isSelected, onSelect }) => (
-                <div onClick={() => onSelect(plan.id)}
-                    className={`p-5 rounded-xl border-2 transition-all duration-300 cursor-pointer ${isSelected ? `border-purple-500 bg-slate-900` : 'border-transparent bg-slate-800 hover:bg-slate-700'}`}>
+                <div onClick={() => onSelect(plan.id)} className={`p-5 rounded-xl border-2 transition-all duration-300 cursor-pointer ${isSelected ? `border-purple-500 bg-slate-900` : 'border-transparent bg-slate-800 hover:bg-slate-700'}`}>
                     <h3 className={`text-2xl font-bold bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>{plan.title}</h3>
                     <p className="text-4xl font-bold my-2">₹{plan.price}<span className="text-base font-normal text-slate-400">/{t.premium_per_month}</span></p>
-                    {isSelected && (
-                         <div className="space-y-2 mt-4 text-slate-300 text-base">
-                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_all}</div>
-                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_occupancy}</div>
-                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_support}</div>
-                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_ad_free}</div>
-                        </div>
-                    )}
+                    {isSelected && (<div className="space-y-2 mt-4 text-slate-300 text-base">
+                        <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_all}</div>
+                        <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_occupancy}</div>
+                        <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_support}</div>
+                        <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_ad_free}</div>
+                    </div>)}
                 </div>
             );
-
-            return (
-                 <div className="animate-fade-in text-white">
-                    <div className="flex items-center mb-4">
-                        <button onClick={onBack} className="p-2 mr-2 rounded-full hover:bg-slate-700 transition-all">
-                            <ion-icon name="arrow-back-outline" class="text-2xl text-slate-300"></ion-icon>
-                        </button>
-                        <h2 className="text-2xl font-bold text-slate-200">{t.premium_title}</h2>
-                    </div>
-                    <div className="space-y-4">
-                        <PlanCard plan={plans.pro} isSelected={selectedPlan === 'pro'} onSelect={setSelectedPlan} />
-                        <PlanCard plan={plans.saver} isSelected={selectedPlan === 'saver'} onSelect={setSelectedPlan} />
-                        <PlanCard plan={plans.basic} isSelected={selectedPlan === 'basic'} onSelect={setSelectedPlan} />
-
-                        <div className="pt-4">
-                             <div className="text-center bg-slate-800 p-3 rounded-lg">
-                                <p className="text-sm text-slate-400">{t.premium_selected_info}</p>
-                                <p className="text-lg font-bold">{selectedPlanData.title} - ₹{selectedPlanData.price}/{t.premium_per_month}</p>
-                            </div>
-                            <button className={`w-full text-white font-bold py-3 mt-4 px-4 text-lg rounded-lg transition-all duration-300 bg-gradient-to-r ${selectedPlanData.color} hover:shadow-lg hover:shadow-purple-500/30`}>
-                                {t.premium_btn_choose}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            );
+            return ( <div className="animate-fade-in text-white"> <div className="flex items-center mb-4"> <button onClick={onBack} className="p-2 mr-2 rounded-full hover:bg-slate-700 transition-all"> <ion-icon name="arrow-back-outline" class="text-2xl text-slate-300"></ion-icon> </button> <h2 className="text-2xl font-bold text-slate-200">{t.premium_title}</h2> </div> <div className="space-y-4"> <PlanCard plan={plans.pro} isSelected={selectedPlan === 'pro'} onSelect={setSelectedPlan} /> <PlanCard plan={plans.saver} isSelected={selectedPlan === 'saver'} onSelect={setSelectedPlan} /> <PlanCard plan={plans.basic} isSelected={selectedPlan === 'basic'} onSelect={setSelectedPlan} /> <div className="pt-4"> <div className="text-center bg-slate-800 p-3 rounded-lg"> <p className="text-sm text-slate-400">{t.premium_selected_info}</p> <p className="text-lg font-bold">{selectedPlanData.title} - ₹{selectedPlanData.price}/{t.premium_per_month}</p> </div> <button className={`w-full text-white font-bold py-3 mt-4 px-4 text-lg rounded-lg transition-all duration-300 bg-gradient-to-r ${selectedPlanData.color} hover:shadow-lg hover:shadow-purple-500/30`}> {t.premium_btn_choose} </button> </div> </div> </div> );
         }
         
-        function ProfilePage({ user, userSubmissions, onAvatarChange, onLogout, onEdit, onDelete, allBusData, userStats }) {
+        // =================================================================
+        // *** புதிய கூறு: நண்பர்கள் பக்கம் (Friends Page) ***
+        // =================================================================
+        function FriendsPage({ allUsers, onBack, t }) {
+            const formatDate = (dateString) => {
+                if (!dateString) return '';
+                return new Date(dateString).toLocaleDateString(t.language === 'ta' ? 'ta-IN' : 'en-US', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            };
+
+            // சமீபத்தில் சேர்ந்த 20 பயனர்களை மட்டும் எடுத்து, அவர்களை தேதி வாரியாக வரிசைப்படுத்தவும்
+            const recentUsers = useMemo(() => {
+                return allUsers
+                    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+                    .slice(0, 20);
+            }, [allUsers]);
+
+            return (
+                <SubPageView title={t.recent_members} iconName="sparkles-outline" onBack={onBack}>
+                    <div className="space-y-3 max-h-[70vh] overflow-y-auto pr-2">
+                        {recentUsers.map(user => (
+                            <div key={user.uid} className="flex items-center p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg">
+                                <img 
+                                    src={`https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(user.name)}`} 
+                                    alt="Avatar" 
+                                    className="w-10 h-10 rounded-full mr-4"
+                                />
+                                <div className="flex-grow">
+                                    <p className="font-bold text-base text-gray-800 dark:text-slate-200">{user.name}</p>
+                                    <p className="text-sm text-gray-500 dark:text-slate-400">
+                                        {t.joined_on}: {formatDate(user.createdAt)}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </SubPageView>
+            );
+        }
+
+        function ProfilePage({ user, userSubmissions, onAvatarChange, onLogout, onEdit, onDelete, allBusData, userStats, allUsers }) {
             const { t, language, setLanguage } = useContext(LanguageContext);
             const { darkMode, setDarkMode } = useContext(ThemeContext);
             const [activeSection, setActiveSection] = useState('main'); 
-            
             const fileInputRef = useRef(null);
             const handleAvatarClick = () => fileInputRef.current.click();
             const handleFileChange = (event) => { if (event.target.files[0]) onAvatarChange(URL.createObjectURL(event.target.files[0])); };
@@ -962,24 +868,17 @@
             
             const leaderboardData = useMemo(() => {
                 const userContributions = {};
-                
                 allBusData.forEach(trip => {
-                    if (trip.userId && trip.userName) {
+                    if (trip.userId) {
+                        const name = trip.userName || `${t.unknown_user} (${trip.userId.substring(0, 5)})`;
                         if (!userContributions[trip.userId]) {
-                            userContributions[trip.userId] = {
-                                name: trip.userName,
-                                points: 0,
-                                isCurrentUser: user && trip.userId === user.uid 
-                            };
+                            userContributions[trip.userId] = { name, points: 0, isCurrentUser: user && trip.userId === user.uid };
                         }
                         userContributions[trip.userId].points += POINTS_PER_CONTRIBUTION;
                     }
                 });
-
-                const leaderboardArray = Object.values(userContributions)
-                                             .sort((a, b) => b.points - a.points);
-                return leaderboardArray;
-            }, [allBusData, user]);
+                return Object.values(userContributions).sort((a, b) => b.points - a.points);
+            }, [allBusData, user, t]);
 
             if (activeSection === 'main') {
                 return (
@@ -1005,47 +904,30 @@
                             <ProfileListItem title={t.section_points_rewards} iconName="trophy-outline" onClick={() => setActiveSection('rewards')} />
                             <ProfileListItem title={t.section_my_contributions} iconName="list-outline" onClick={() => setActiveSection('contributions')} />
                             <ProfileListItem title={t.section_settings} iconName="settings-outline" onClick={() => setActiveSection('settings')} />
-                             <ProfileListItem title={t.section_premium} iconName="diamond-outline" onClick={() => setActiveSection('premium')} />
+                            
+                            {/* =====> புதிய "Friends" Tab இணைப்பு இங்கே <===== */}
+                            <ProfileListItem title={t.section_friends} iconName="people-circle-outline" onClick={() => setActiveSection('friends')} />
+
+                            <ProfileListItem title={t.section_premium} iconName="diamond-outline" onClick={() => setActiveSection('premium')} />
                             <ProfileListItem title={t.section_about} iconName="information-circle-outline" onClick={() => setActiveSection('about')} />
                         </div>
                         <div className="mt-6">
-                            <button onClick={onLogout} className="w-full flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 text-lg rounded-lg transition-colors"><ion-icon name="log-out-outline" class="mr-2 text-xl"></ion-icon>{t.btn_logout}</button>
+                            {/* =====> Logout பட்டன் நிறம் மாற்றப்பட்டுள்ளது <===== */}
+                            <button onClick={onLogout} className="w-full flex items-center justify-center bg-gradient-to-r from-red-700 to-red-500 hover:from-red-800 hover:to-red-600 text-white font-bold py-3 px-4 text-lg rounded-lg transition-all"><ion-icon name="log-out-outline" class="mr-2 text-xl"></ion-icon>{t.btn_logout}</button>
                         </div>
                     </div>
                 );
             }
 
-            if (activeSection === 'rewards') return <SubPageView title={t.section_points_rewards} iconName="trophy-outline" onBack={() => setActiveSection('main')}><div className="grid grid-cols-2 gap-4 mb-4"><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_contributions}</p><p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{contributionCount}</p></div><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_points}</p><p className="text-2xl font-bold text-green-700 dark:text-green-400">{totalPoints}</p></div></div><h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">{t.leaderboard} <span className="text-xs font-normal text-gray-500">({t.city_level})</span></h4><div className="space-y-2">{leaderboardData.map((entry, index) => (<div key={index} className={`flex items-center p-2 rounded-lg ${entry.isCurrentUser ? 'bg-blue-100 dark:bg-slate-700/80 border border-blue-300 dark:border-blue-500' : ''}`}><span className="font-bold text-gray-600 dark:text-slate-400 mr-3">{index + 1}.</span><span className="flex-1 font-medium text-gray-800 dark:text-slate-200">{entry.name}</span><span className="font-bold text-blue-600 dark:text-blue-400">{entry.points} pts</span></div>))}</div></SubPageView>;
+            if (activeSection === 'rewards') return <SubPageView title={t.section_points_rewards} iconName="trophy-outline" onBack={() => setActiveSection('main')}><div className="grid grid-cols-2 gap-4 mb-4"><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_contributions}</p><p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{contributionCount}</p></div><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_points}</p><p className="text-2xl font-bold text-green-700 dark:text-green-400">{totalPoints}</p></div></div><h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">{t.leaderboard} <span className="text-xs font-normal text-gray-500">({t.city_level})</span></h4><div className="space-y-2 max-h-60 overflow-y-auto pr-2">{leaderboardData.length > 0 ? leaderboardData.map((entry, index) => (<div key={index} className={`flex items-center p-2 rounded-lg ${entry.isCurrentUser ? 'bg-blue-100 dark:bg-slate-700/80 border border-blue-300 dark:border-blue-500' : ''}`}><span className="font-bold text-gray-600 dark:text-slate-400 mr-3">{index + 1}.</span><span className="flex-1 font-medium text-gray-800 dark:text-slate-200">{entry.name}</span><span className="font-bold text-blue-600 dark:text-blue-400">{entry.points} pts</span></div>)) : <p className="text-center text-gray-500 dark:text-slate-400 py-4 text-base">No contributions yet.</p>}</div></SubPageView>;
             if (activeSection === 'contributions') return <SubPageView title={t.section_my_contributions} iconName="list-outline" onBack={() => setActiveSection('main')}>{contributionCount > 0 ? (<div className="space-y-3 max-h-[65vh] overflow-y-auto pr-2">{userSubmissions.map((sub) => (<div key={sub.id} className="p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-slate-700"><div className="flex justify-between items-start"><div><p className="font-bold text-base text-gray-700 dark:text-slate-200">{t.bus_no_prefix} {sub.busNumber}</p>{sub.stops && sub.stops.length > 0 ? (<p className="text-sm text-gray-600 dark:text-slate-300">{sub.stops[0].name} → {sub.stops[sub.stops.length - 1].name}</p>) : (<p className="text-sm text-red-500 italic">Route info unavailable</p>)}{sub.submissionDate && <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{t.added_on}: {formatDate(sub.submissionDate)}</p>}</div><div className="flex items-center space-x-3"><button onClick={() => onEdit(sub)} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-lg"><ion-icon name="create-outline"></ion-icon></button><button onClick={() => onDelete(sub.id)} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-lg"><ion-icon name="trash-outline"></ion-icon></button></div></div></div>))}</div>) : (<p className="text-center text-gray-500 dark:text-slate-400 py-4 text-base">{t.no_contributions_yet}</p>)}</SubPageView>;
             if (activeSection === 'settings') return <SubPageView title={t.section_settings} iconName="settings-outline" onBack={() => setActiveSection('main')}><div className="space-y-2 divide-y dark:divide-slate-700"><ToggleSwitch label={t.dark_mode} enabled={darkMode} setEnabled={setDarkMode} /><div className="flex items-center justify-between py-2"><span className="text-base text-gray-700 dark:text-slate-300">{t.language_option}</span><select value={language} onChange={e => setLanguage(e.target.value)} className="bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-slate-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"><option value="ta">தமிழ்</option><option value="en">English</option></select></div></div></SubPageView>;
-            if (activeSection === 'about') return (
-                <SubPageView title={t.section_about} iconName="information-circle-outline" onBack={() => setActiveSection('main')}>
-                    <p className="text-base text-gray-600 dark:text-slate-300 leading-relaxed">{t.about_text}</p>
-                    <div className="mt-6 border-t dark:border-slate-700 pt-4">
-                        <h4 className="font-semibold text-lg text-gray-700 dark:text-slate-300 mb-3">{t.section_community_stats}</h4>
-                        <div className="grid grid-cols-3 gap-3 text-center">
-                             <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
-                                <ion-icon name="people-outline" class="text-3xl text-blue-500 mx-auto"></ion-icon>
-                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.passenger}</p>
-                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_passenger}</p>
-                             </div>
-                             <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
-                                <ion-icon name="car-sport-outline" class="text-3xl text-green-500 mx-auto"></ion-icon>
-                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.driver}</p>
-                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_driver}</p>
-                             </div>
-                              <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
-                                <ion-icon name="reader-outline" class="text-3xl text-orange-500 mx-auto"></ion-icon>
-                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.conductor}</p>
-                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_conductor}</p>
-                             </div>
-                        </div>
-                    </div>
-                    <p className="text-sm text-center text-gray-500 dark:text-slate-400 mt-6 pt-4 border-t dark:border-slate-700">{t.developed_by}: <span className="font-semibold">EV Sanjeevan</span></p>
-                </SubPageView>
-            );
-            if (activeSection === 'premium') return <PremiumPage onBack={() => setActiveSection('main')} />;
             
+            {/* =====> புதிய Friends Page-ஐக் காட்டும் தர்க்கம் <===== */}
+            if (activeSection === 'friends') return <FriendsPage allUsers={allUsers} onBack={() => setActiveSection('main')} t={t} />;
+
+            if (activeSection === 'about') return ( <SubPageView title={t.section_about} iconName="information-circle-outline" onBack={() => setActiveSection('main')}> <p className="text-base text-gray-600 dark:text-slate-300 leading-relaxed">{t.about_text}</p> <div className="mt-6 border-t dark:border-slate-700 pt-4"> <h4 className="font-semibold text-lg text-gray-700 dark:text-slate-300 mb-3">{t.section_community_stats}</h4> <div className="grid grid-cols-3 gap-3 text-center"> <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg"> <ion-icon name="people-outline" class="text-3xl text-blue-500 mx-auto"></ion-icon> <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.passenger}</p> <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_passenger}</p> </div> <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg"> <ion-icon name="car-sport-outline" class="text-3xl text-green-500 mx-auto"></ion-icon> <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.driver}</p> <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_driver}</p> </div> <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg"> <ion-icon name="reader-outline" class="text-3xl text-orange-500 mx-auto"></ion-icon> <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.conductor}</p> <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_conductor}</p> </div> </div> </div> <p className="text-sm text-center text-gray-500 dark:text-slate-400 mt-6 pt-4 border-t dark:border-slate-700">{t.developed_by}: <span className="font-semibold">EV Sanjeevan</span></p> </SubPageView> );
+            if (activeSection === 'premium') return <PremiumPage onBack={() => setActiveSection('main')} />;
             return null;
         }
 
@@ -1061,62 +943,87 @@
             const [loading, setLoading] = useState(true);
             const [error, setError] = useState("");
             const [mainTrip, setMainTrip] = useState(null);
-            const [upcomingTrips, setUpcomingTrips] = useState([]);
             const [displayStops, setDisplayStops] = useState([]); 
             const [currentStopIndex, setCurrentStopIndex] = useState(0);
             const intervalRef = useRef(null);
             const [allBusData, setAllBusData] = useState([]);
-            const [saveStatus, setSaveStatus] = useState('');
             const [savedRoutes, setSavedRoutes] = useState([]);
-            const [darkMode, setDarkMode] = useState(false);
+            const [darkMode, setDarkMode] = useState(() => localStorage.getItem('darkMode') === 'true');
             const [editingTrip, setEditingTrip] = useState(null);
             const [userStats, setUserStats] = useState({ passenger: 0, driver: 0, conductor: 0 });
+            
+            // =====> அனைத்துப் பயனர்களையும் பெற புதிய state <=====
+            const [allUsers, setAllUsers] = useState([]);
 
             useEffect(() => {
                 const { db, firebase } = window;
                 if (!db || !firebase) { console.error("Firebase is not initialized yet."); setLoading(false); return; }
-                const unsubscribe = firebase.onSnapshot(firebase.collection(db, "busTrips"), (querySnapshot) => {
-                    const tripsData = querySnapshot.docs.map(doc => {
+                
+                const unsubscribeTrips = firebase.onSnapshot(firebase.collection(db, "busTrips"), (querySnapshot) => {
+                    const tripsData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data(), submissionDate: doc.data().submissionDate?.toDate ? doc.data().submissionDate.toDate().toISOString() : null }));
+                    setAllBusData(tripsData);
+                    setLoading(false); 
+                }, (err) => { console.error("Error fetching bus trips: ", err); setError("Error fetching data."); setLoading(false); });
+
+                const unsubscribeUsers = firebase.onSnapshot(firebase.collection(db, "users"), (snapshot) => {
+                    const stats = { passenger: 0, driver: 0, conductor: 0 };
+                    // =====> அனைத்துப் பயனர்களின் முழு விவரங்களையும் பெறுகிறோம் <=====
+                    const usersData = snapshot.docs.map(doc => {
                         const data = doc.data();
-                        return { id: doc.id, ...data, stops: data.stops || [], submissionDate: data.submissionDate?.toDate ? data.submissionDate.toDate().toISOString() : null };
-                    });
-                    setAllBusData(tripsData); setLoading(false); 
-                }, (error) => { console.error("Error fetching data from Firestore: ", error); setError("Error fetching data."); setLoading(false); });
-                return () => unsubscribe();
-            }, []);
-            
-            useEffect(() => {
-                const { db, firebase } = window;
-                if (!db || !firebase) return;
-                const usersCollection = firebase.collection(db, "users");
-                const unsubscribe = firebase.onSnapshot(usersCollection, (snapshot) => {
-                    let stats = { passenger: 0, driver: 0, conductor: 0 };
-                    snapshot.docs.forEach(doc => {
-                        const userData = doc.data();
-                        if(userData.role && stats.hasOwnProperty(userData.role)) {
-                            stats[userData.role]++;
+                        const role = data.role;
+                        if (role && stats.hasOwnProperty(role)) {
+                            stats[role]++;
+                        }
+                        return {
+                            uid: doc.id,
+                            ...data,
+                            createdAt: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : null
                         }
                     });
                     setUserStats(stats);
-                });
-                return () => unsubscribe();
+                    setAllUsers(usersData); // <-- புதிய state-ஐ இங்கே அமைக்கிறோம்
+                }, (err) => console.error("Error fetching users: ", err));
+                
+                return () => {
+                    unsubscribeTrips();
+                    unsubscribeUsers();
+                };
             }, []);
 
             useEffect(() => {
                 const { auth, firebaseAuth } = window;
                 if (!auth || !firebaseAuth) return;
-                const unsubscribe = firebaseAuth.onAuthStateChanged(auth, (firebaseUser) => {
+                const unsubscribeAuth = firebaseAuth.onAuthStateChanged(auth, (firebaseUser) => {
                     if (firebaseUser) { handleUserLogin(firebaseUser); } else { setUser(null); }
                     setAuthChecked(true);
                 });
-                return () => unsubscribe();
+                return () => unsubscribeAuth();
             }, []);
 
-            useEffect(() => { const routesFromStorage = localStorage.getItem('cityBusSavedRoutes'); if (routesFromStorage) { setSavedRoutes(JSON.parse(routesFromStorage)); } }, []);
-            useEffect(() => { localStorage.setItem('cityBusSavedRoutes', JSON.stringify(savedRoutes)); }, [savedRoutes]);
-            useEffect(() => { if (darkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [darkMode]);
+            useEffect(() => { 
+                const routesFromStorage = localStorage.getItem('cityBusSavedRoutes'); 
+                if (routesFromStorage) { setSavedRoutes(JSON.parse(routesFromStorage)); }
+            }, []);
+            
+            useEffect(() => { 
+                localStorage.setItem('cityBusSavedRoutes', JSON.stringify(savedRoutes)); 
+            }, [savedRoutes]);
 
-            const t = useMemo(() => { const baseLang = translations[language] || translations['ta']; const fallbackLang = translations['ta']; return new Proxy(baseLang, { get(target, prop) { return target[prop] || fallbackLang[prop]; } }); }, [language]);
+            useEffect(() => {
+                if (darkMode) {
+                    document.documentElement.classList.add('dark');
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    document.documentElement.classList.remove('dark');
+                    localStorage.setItem('darkMode', 'false');
+                }
+            }, [darkMode]);
+
+            const t = useMemo(() => { 
+                const baseLang = translations[language] || translations['ta'];
+                const fallbackLang = translations['ta']; 
+                return new Proxy(baseLang, { get(target, prop) { return target[prop] || fallbackLang[prop]; } }); 
+            }, [language]);
             
             const handleUserLogin = async (firebaseUser) => {
                 const { db, firebase } = window;
@@ -1124,31 +1031,28 @@
                 const userDoc = await firebase.getDoc(userDocRef);
                 
                 let userData;
-
                 if (userDoc.exists()) {
                     userData = userDoc.data();
                 } else {
-                    console.log(`User ${firebaseUser.uid} not found in Firestore. Creating new entry.`);
+                    console.warn(`User document for ${firebaseUser.uid} not found. This can happen during registration.`);
                     userData = {
                         name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
                         email: firebaseUser.email,
                         role: 'passenger',
-                        createdAt: firebase.serverTimestamp()
                     };
-                    await firebase.setDoc(userDocRef, userData);
                 }
                 
                 setUser({ 
                     uid: firebaseUser.uid, 
-                    name: firebaseUser.displayName || firebaseUser.email.split('@')[0], 
+                    name: userData.name || firebaseUser.displayName || firebaseUser.email.split('@')[0], 
                     email: firebaseUser.email, 
-                    avatar: firebaseUser.photoURL || `https://api.dicebear.com/8.x/initials/svg?seed=${firebaseUser.displayName || firebaseUser.email}`,
+                    avatar: firebaseUser.photoURL || `https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(userData.name || firebaseUser.displayName || firebaseUser.email)}`,
                     role: userData.role || 'passenger'
                 }); 
             };
             
             const handleLogout = () => { window.firebaseAuth.signOut(window.auth).then(() => { setCurrentPage('home'); }).catch((error) => console.error('Sign out error:', error)); };
-            const handleToggleSaveRoute = () => { if (!searchParams) return; const currentRoute = { startPoint: searchParams.startPoint, endPoint: searchParams.endPoint }; const isExisting = savedRoutes.some(r => r.startPoint === currentRoute.startPoint && r.endPoint === currentRoute.endPoint); if (isExisting) { setSavedRoutes(savedRoutes.filter(r => r.startPoint !== currentRoute.startPoint || r.endPoint !== currentRoute.endPoint)); setSaveStatus(t.route_removed_success); } else { setSavedRoutes(prev => [...prev, currentRoute]); setSaveStatus(t.route_saved_success); } setTimeout(() => setSaveStatus(''), 3000); };
+            const handleToggleSaveRoute = () => { if (!searchParams) return; const currentRoute = { startPoint: searchParams.startPoint, endPoint: searchParams.endPoint }; const isExisting = savedRoutes.some(r => r.startPoint === currentRoute.startPoint && r.endPoint === currentRoute.endPoint); if (isExisting) { setSavedRoutes(savedRoutes.filter(r => r.startPoint !== currentRoute.startPoint || r.endPoint !== currentRoute.endPoint)); } else { setSavedRoutes(prev => [...prev, currentRoute]); } };
             const handleDeleteRoute = (indexToDelete) => { setSavedRoutes(prev => prev.filter((_, index) => index !== indexToDelete)); };
             const handleApplyRoute = (setStart, setEnd, route = null) => { if (route) { setStart(route.startPoint); setEnd(route.endPoint); } };
             const handleEmailLogin = (email, password, callback) => { window.firebaseAuth.signInWithEmailAndPassword(window.auth, email, password).then(cred => { callback(true); }).catch(err => callback(false, err.message)); };
@@ -1160,17 +1064,10 @@
                         return firebaseAuth.updateProfile(cred.user, { displayName: name })
                             .then(() => {
                                 const userDocRef = firebase.doc(db, "users", cred.user.uid);
-                                return firebase.setDoc(userDocRef, {
-                                    name: name,
-                                    email: email,
-                                    role: role,
-                                    createdAt: firebase.serverTimestamp()
-                                });
+                                return firebase.setDoc(userDocRef, { name, email, role, createdAt: firebase.serverTimestamp() });
                             });
                     })
-                    .then(() => {
-                        callback(true);
-                    })
+                    .then(() => callback(true))
                     .catch(err => callback(false, err.message));
             };
 
@@ -1188,59 +1085,80 @@
             const handleDeleteTrip = async (tripId) => {
                 const { db, firebase } = window;
                 if (!window.confirm(t.delete_confirm_text)) return;
-                try { await firebase.deleteDoc(firebase.doc(db, "busTrips", tripId)); alert(t.delete_success); } 
-                catch (error) { console.error("Error deleting document: ", error); alert("Error deleting."); }
+                try { 
+                    await firebase.deleteDoc(firebase.doc(db, "busTrips", tripId));
+                } catch (error) { 
+                    console.error("Error deleting document: ", error); 
+                }
             };
             
             const handleEditTrip = (trip) => { setEditingTrip(trip); setCurrentPage('upload'); };
 
             const handleUpdateTrip = async (tripId, updatedData) => {
                  const { db, firebase } = window;
-                 const tripRef = firebase.doc(db, "busTrips", tripId);
                  try {
-                     await firebase.updateDoc(tripRef, updatedData);
-                     setEditingTrip(null); setCurrentPage('profile');
+                     await firebase.updateDoc(firebase.doc(db, "busTrips", tripId), updatedData);
+                     setEditingTrip(null); 
+                     setCurrentPage('profile');
                      return { success: true, message: t.update_success };
                  } catch (error) { console.error("Error updating document: ", error); return { success: false, message: "Error updating." }; }
             };
 
             const handleSearch = (params) => {
-                setLoading(true); setError(""); setMainTrip(null); setUpcomingTrips([]); setDisplayStops([]); setSearchParams(params);
+                setLoading(true); setError(""); setMainTrip(null); setDisplayStops([]); setSearchParams(params);
                 if (!params.startPoint || !params.endPoint) { setError(t.error_select_locations); setLoading(false); return; }
                 
                 setTimeout(() => {
                     const foundTrip = allBusData.find(trip => {
-                        if (!trip.busNumber || !trip.stops || trip.stops.length === 0) return false;
+                        if (!trip.busNumber || !trip.stops || trip.stops.length < 2) return false;
                         const stopNames = trip.stops.map(s => s.name);
+                        const startIndex = stopNames.indexOf(params.startPoint);
+                        const endIndex = stopNames.indexOf(params.endPoint);
+
                         return trip.busNumber.toUpperCase() === params.busNumber.trim().toUpperCase() &&
                                trip.stops[0].time === params.specificTime &&
-                               stopNames.includes(params.startPoint) &&
-                               stopNames.includes(params.endPoint);
+                               startIndex !== -1 && endIndex !== -1 && startIndex < endIndex;
                     });
 
                     if (foundTrip) {
-                        setMainTrip(foundTrip);
                         const startIndex = foundTrip.stops.findIndex(s => s.name === params.startPoint);
                         const endIndex = foundTrip.stops.findIndex(s => s.name === params.endPoint);
-                        if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) { 
-                            setDisplayStops(foundTrip.stops.slice(startIndex, endIndex + 1)); 
-                        } else { 
-                            setError(t.error_no_trip_at_time); setMainTrip(null); 
-                        }
+                        setDisplayStops(foundTrip.stops.slice(startIndex, endIndex + 1));
+                        setMainTrip(foundTrip);
                     } else {
                         setError(t.error_no_trips_on_route);
                     }
                     setLoading(false);
-                }, 1000);
+                }, 500);
             };
 
-            useEffect(() => { if (intervalRef.current) clearInterval(intervalRef.current); if (mainTrip && displayStops.length > 0) { setCurrentStopIndex(0); intervalRef.current = setInterval(() => { setCurrentStopIndex(prevIndex => { if (prevIndex >= displayStops.length - 1) { clearInterval(intervalRef.current); return prevIndex; } return prevIndex + 1; }); }, 4000); } return () => clearInterval(intervalRef.current); }, [mainTrip, displayStops]);
+            useEffect(() => { 
+                if (intervalRef.current) clearInterval(intervalRef.current); 
+                if (mainTrip && displayStops.length > 0) { 
+                    setCurrentStopIndex(0); 
+                    intervalRef.current = setInterval(() => { 
+                        setCurrentStopIndex(prevIndex => { 
+                            if (prevIndex >= displayStops.length - 1) { 
+                                clearInterval(intervalRef.current); 
+                                return prevIndex; 
+                            } 
+                            return prevIndex + 1; 
+                        }); 
+                    }, 4000); 
+                } 
+                return () => clearInterval(intervalRef.current); 
+            }, [mainTrip, displayStops]);
             
-            const eta = displayStops.length > 0 ? (displayStops.length - 1 - currentStopIndex) * 4 : 0;
-            const handleNavigate = (page) => { if (page !== 'upload') { setEditingTrip(null); } setCurrentPage(page); };
+            const handleNavigate = (page) => { 
+                if (page !== 'upload') setEditingTrip(null);
+                setMainTrip(null);
+                setError("");
+                setCurrentPage(page); 
+            };
 
             const renderPage = () => {
                 const isRouteSaved = searchParams ? savedRoutes.some(r => r.startPoint === searchParams.startPoint && r.endPoint === searchParams.endPoint) : false;
+                const eta = displayStops.length > 0 ? (displayStops.length - 1 - currentStopIndex) * 4 : 0;
                 
                 const renderTripDetails = () => {
                     if (!mainTrip) return null;
@@ -1266,7 +1184,6 @@
                                             <ion-icon name={isRouteSaved ? "star" : "star-outline"} class={`text-2xl transition-colors ${isRouteSaved ? 'text-yellow-400' : 'text-white'}`}></ion-icon>
                                         </button>
                                     </div>
-                                    {saveStatus && <p className={`text-center text-sm rounded p-1 mb-3 ${saveStatus === t.route_saved_success ? 'bg-green-500' : 'bg-yellow-500'}`}>{saveStatus}</p>}
                                     <div className="flex justify-between items-center my-4">
                                         <div className="text-center"> <p className="text-base text-blue-200">{t.card_departure}</p> <p className="text-2xl font-bold">{startStop.time}</p> </div>
                                         <div className="flex-grow flex items-center mx-3"> <div className="w-full border-t-2 border-dashed border-blue-300/50"></div> <ion-icon name="bus" class="mx-2 text-xl text-blue-200"></ion-icon> <div className="w-full border-t-2 border-dashed border-blue-300/50"></div> </div>
@@ -1287,13 +1204,12 @@
                 switch(currentPage) {
                     case 'home': return ( <div> <HomePage allBusData={allBusData} onSearch={handleSearch} savedRoutes={savedRoutes} onApplyRoute={handleApplyRoute} onDeleteRoute={handleDeleteRoute}/> {loading && <p className="text-center text-base dark:text-slate-300 mt-4">{t.loading_text}</p>} {error && <div className="bg-red-100 dark:bg-red-900/40 border text-center border-red-400 dark:border-red-500/50 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg my-6 text-base">{error}</div>} {renderTripDetails()}</div> );
                     case 'explore': return <ExplorePage allBusData={allBusData} />;
-                    case 'upload': 
-                        return <UploadPage onSubmitData={handleUploadSubmit} initialData={editingTrip} onUpdateData={handleUpdateTrip} allBusData={allBusData} />;
+                    case 'upload': return <UploadPage onSubmitData={handleUploadSubmit} initialData={editingTrip} onUpdateData={handleUpdateTrip} allBusData={allBusData} />;
                     case 'profile':
                         if (!authChecked) { return <div className="text-center mt-10 text-lg">Loading Account...</div>; }
                         if (!user) return <AuthPage onLogin={handleEmailLogin} onRegister={handleRegister} />;
                         const mySubmissions = allBusData.filter(trip => trip.userId === user.uid);
-                        return <ProfilePage user={user} userSubmissions={mySubmissions} onAvatarChange={handleAvatarChange} onLogout={handleLogout} onEdit={handleEditTrip} onDelete={handleDeleteTrip} allBusData={allBusData} userStats={userStats} />;
+                        return <ProfilePage user={user} userSubmissions={mySubmissions} onAvatarChange={handleAvatarChange} onLogout={handleLogout} onEdit={handleEditTrip} onDelete={handleDeleteTrip} allBusData={allBusData} userStats={userStats} allUsers={allUsers} />;
                     default: return <HomePage allBusData={allBusData} onSearch={handleSearch} savedRoutes={savedRoutes} onApplyRoute={handleApplyRoute} onDeleteRoute={handleDeleteRoute} />;
                 }
             };
@@ -1301,7 +1217,6 @@
             return (
                 <LanguageContext.Provider value={{ language, setLanguage, t }}>
                     <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
-                        {/* **மாற்றம் 2: பாதுகாப்பு கூறை இங்கே சேர்க்கவும்** */}
                         <SecuritySetup />
                         <div className="flex flex-col min-h-screen">
                             <Header user={user} darkMode={darkMode} />
