@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- நீங்கள் வழங்கிய புதிய மெட்டா டேக்குகள் இங்கே சேர்க்கப்பட்டுள்ளன -->
+    <!-- Primary Meta Tags -->
+    <title>MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes</title>
+    <meta name="title" content="MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes">
+    <meta name="description" content="Track your local buses in real-time with MyBus. Check accurate bus timings, routes, and arrival updates for your city. Built with secure, fast, and mobile-friendly technology.">
+
+    <!-- Keywords for SEO -->
+    <meta name="keywords" content="local bus tracking, real time bus timings, city bus live tracking, bus routes, MyBus app, EVS bus tracking, public transport tracker, bus schedule live, Tamil Nadu bus timing, MyBus real-time updates">
+
+    <!-- Author -->
+    <meta name="author" content="EVS - MyBus Developer">
+
+    <!-- Robots -->
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://mybus-website.com/">
+    <meta property="og:title" content="MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes">
+    <meta property="og:description" content="Track your city buses in real-time with MyBus. Stay updated with accurate routes and timings.">
+    <meta property="og:image" content="https://mybus-website.com/images/og-image.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://mybus-website.com/">
+    <meta property="twitter:title" content="MyBus - Local Bus Tracking | Real-Time Bus Timings & Routes">
+    <meta property="twitter:description" content="Track your city buses in real-time with MyBus. Stay updated with accurate routes and timings.">
+    <meta property="twitter:image" content="https://mybus-website.com/images/og-image.png">
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "TransportOrganization",
+      "name": "MyBus",
+      "url": "https://mybus-website.com",
+      "logo": "https://mybus-website.com/images/logo.png",
+      "description": "Track local buses in real-time with MyBus. Get accurate routes, timings, and arrival details for your city.",
+      "sameAs": [
+        "https://www.facebook.com/mybus",
+        "https://www.twitter.com/mybus",
+        "https://www.instagram.com/mybus"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9876543210",
+        "contactType": "Customer Service",
+        "areaServed": "IN",
+        "availableLanguage": ["English","Tamil"]
+      },
+      "areaServed": {
+        "@type": "Place",
+        "name": "Tamil Nadu"
+      }
+    }
+    </script>
+    <!-- புதிய மெட்டா டேக்குகள் முடிவு -->
+
+    <!-- Google Fonts: Teko -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React + ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    
+    <!-- Babel CDN (for JSX) -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Ionicons CDN for Icons -->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</head>
+<body class="bg-gray-100 dark:bg-slate-900 font-sans transition-colors duration-300">
+    <div id="root"></div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+      // Firestore இறக்குமதிகளில் doc, setDoc, getDoc ஆகியவற்றை சேர்க்கவும்
+      import { getFirestore, collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    
+      const firebaseConfig = {
+          apiKey: "AIzaSyAB3MignRIysnz2_dFrUAkyTxCrnWcTRrg",
+          authDomain: "mybusdpi.firebaseapp.com",
+          projectId: "mybusdpi",
+          storageBucket: "mybusdpi.firebasestorage.app",
+          messagingSenderId: "529296793904",
+          appId: "1:529296793904:web:df638aeb269ba3eed128f5"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+      const auth = getAuth(app);
+    
+      window.db = db;
+      window.auth = auth;
+      // firebase window object-ல் doc, setDoc, getDoc ஆகியவற்றை சேர்க்கவும்
+      window.firebase = { collection, addDoc, onSnapshot, serverTimestamp, doc, deleteDoc, updateDoc, setDoc, getDoc };
+      window.firebaseAuth = { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, onAuthStateChanged, signOut };
+    </script>
+
+    <script type="text/babel">
+        // =================================================================
+        // பகுதி 0: செயலி கட்டமைப்பு (App Configuration)
+        // =================================================================
+        
+        tailwind.config = {
+          darkMode: 'class',
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Teko', 'sans-serif'],
+              },
+            },
+          },
+        };
+
+        const { useState, useEffect, useRef, useMemo, createContext, useContext } = React;
+
+        // =================================================================
+        // பகுதி 1: மொழிபெயர்ப்பு மற்றும் தரவுகள்
+        // =================================================================
+        const ThemeContext = createContext();
+        const LanguageContext = createContext();
+
+        const translations = {
+            ta: {
+                app_title: "நகரப் பேருந்து", bus_no_prefix: "பேருந்து எண்:", nav_home: "Home", nav_explore: "வழித்தடம்", nav_upload: "பதிவேற்று", nav_profile: "கணக்கு", home_title: "பேருந்தைத் தேடுங்கள்", home_greeting: "முதலில் சில பேருந்து தகவல்களை பதிவேற்றுங்கள்!", home_greeting_ready: "இனிய பயணத்திற்கு வாழ்த்துக்கள்!", label_from: "தொடங்கும் இடம்", label_to: "இறங்கும் இடம்", label_bus_no: "பேருந்து எண்", label_time_period: "நேரப் பகுதி*", label_departure_time: "புறப்படும் நேரம்", btn_show_trip: "பயணத்தைக் காட்டு", loading_text: "தேடுகிறது...", no_trips_found: "தகுந்த பயணங்கள் இல்லை", error_select_locations: "தொடங்கும் மற்றும் இறங்கும் இடத்தைத் தேர்ந்தெடுக்கவும்.", error_no_trip_at_time: "தேர்ந்தெடுக்கப்பட்ட நேரத்திற்குப் பிறகு பேருந்துகள் இல்லை.", error_no_trips_on_route: "இந்த வழித்தடத்தில் பயனர்கள் பதிவேற்றிய பயணங்கள் இல்லை.", explore_title: "வழித்தடங்களைக் கண்டறியவும்", explore_subtitle: "ஊரின் பெயரை உள்ளிட்டு பேருந்துகளைக் கண்டறியவும்.", explore_placeholder: "எ.கா: தர்மபுரி", explore_no_results: "இந்த ஊருக்கு பேருந்துகள் கண்டறியப்படவில்லை.", upload_title: "தரவைப் பதிவேற்றம்", upload_subtitle: "பேருந்துத் தகவல்களைப் பகிர்ந்து சமூகத்திற்கு உதவுங்கள்.", label_busNumber: "பேருந்து எண்*", label_district: "தாலுக்கா", label_startTime: "புறப்படும் நேரம்* (eg: 6:40 AM)", label_endTime: "இறங்கும் நேரம்* (eg: 7:30 AM)", label_duration: "பயண நேரம்* (எ.கா: 50 நிமிடம்)", label_stops: "நிறுத்தங்கள்*", label_stop_n: (n) => `நிறுத்தம் ${n}`, btn_add_stop: "மேலும் நிறுத்தங்களைச் சேர்க்க", btn_submit: "சமர்ப்பி", time_morning: "காலை", time_afternoon: "மதியம்", time_evening: "மாலை", time_night: "இரவு", card_departure: "புறப்பாடு", card_arrival: "வருகை", card_total_time: "மொத்த நேரம்", next_buses_title: (busNo) => `அடுத்த பேருந்துகள் (எண்: ${busNo})`, tracking_now: "பேருந்து இப்போது:", tracking_near: "அருகில் உள்ளது.", tracking_eta: (loc, time) => `${loc}-க்கு வர இன்னும் சுமார் ${time} நிமிடங்கள் ஆகும்.`, tracking_finished: (loc) => `பயணம் முடிந்தது! பேருந்து ${loc}-ஐ அடைந்துவிட்டது.`, stops_title: "உங்கள் பயண நிறுத்தங்கள்", submit_success: "நன்றி! உங்கள் தகவல் வெற்றிகரமாகச் சமர்ப்பிக்கப்பட்டது.", submit_spam: "இந்தத் தகவல் ஏற்கனவே பலமுறை சமர்ப்பிக்கப்பட்டுள்ளது.", submit_login_required: "பங்களிக்க, தயவுசெய்து உள்நுழையவும்.", duration_min: "நிமி.", duration_hour: "மணி நேரம்", duration_hr: "மணி", label_kilometers: "கிலோமீட்டர்*", card_distance: "தொலைவு", route_removed_success: "வழித்தடம் நீக்கப்பட்டது!", card_ticket_price: "டிக்கெட் விலை", save_route: "வழித்தடத்தைச் சேமி", saved_routes_title: "சேமித்த வழித்தடங்கள்", route_saved_success: "வழித்தடம் சேமிக்கப்பட்டது!", route_already_exists: "இந்த வழித்தடம் ஏற்கனவே சேமிக்கப்பட்டுள்ளது.", no_saved_routes: "நீங்கள் இன்னும் எந்த வழித்தடத்தையும் சேமிக்கவில்லை.", profile_signin_title: "கணக்கைத் தொடங்குங்கள்", profile_signin_subtitle: "உங்கள் பங்களிப்புகளைக் காண உள்நுழையவும்.", btn_signin_google: "Sign in with Google", welcome_back: (name) => `மீண்டும் வருக, ${name}!`, label_email: "மின்னஞ்சல் முகவரி", label_password: "கடவுச்சொல்", btn_login: "உள்நுழை", btn_logout: "வெளியேறு", label_first_name: "முதல் பெயர்", label_last_name: "கடைசி பெயர்", label_confirm_password: "கடவுச்சொல்லை உறுதிப்படுத்தவும்", btn_register: "பதிவு செய்", register_title: "புதிய கணக்கை உருவாக்கு", register_subtitle: "சமூகத்தில் இணைய பதிவு செய்யுங்கள்.", link_to_register: "கணக்கு இல்லையா?", link_to_login: "ஏற்கனவே கணக்கு உள்ளதா?", section_profile: "சுயவிவரம்", section_points_rewards: "புள்ளிகள் & வெகுமதிகள்", section_my_contributions: "என் பங்களிப்புகள்", section_settings: "அமைப்புகள்", section_about: "செயலி பற்றி", section_premium: "பிரீமியம் அம்சங்கள்", total_contributions: "மொத்த பங்களிப்புகள்", total_points: "மொத்த புள்ளிகள்", leaderboard: "முன்னிலை வகிப்பவர்கள்", city_level: "நகர அளவில்", added_on: "சேர்த்த தேதி", no_contributions_yet: "நீங்கள் இதுவரை எந்தத் தகவலையும் பதிவேற்றவில்லை.", dark_mode: "இருண்ட பயன்முறை", language_option: "மொழி", notifications: "அறிவிப்புகள்", btn_edit: "திருத்து", btn_delete: "நீக்கு", delete_confirm_title: "உறுதியாக நீக்கவா?", delete_confirm_text: "இந்தத் தகவலை நிரந்தரமாக நீக்க விரும்புகிறீர்களா?", btn_cancel: "ரத்துசெய்", delete_success: "தகவல் வெற்றிகரமாக நீக்கப்பட்டது.", update_success: "தகவல் வெற்றிகரமாகப் புதுப்பிக்கப்பட்டது.", btn_save_changes: "மாற்றங்களைச் சேமி", about_text: "இந்த செயலி, நகரப் பேருந்து நேரங்களைக் கண்டறியவும், புதிய தகவல்களைப் பகிரவும் உருவாக்கப்பட்டது. இது ஒரு சமூக முயற்சி. பயனர்கள் பகிரும் தகவல்களைக் கொண்டே இது இயங்குகிறது.", developed_by: "உருவாக்கியவர்", label_stop_time: "நேரம் (6:50 AM)", label_stop_price: "விலை (₹)", premium_title: "உங்கள் திட்டத்தைத் தேர்ந்தெடுக்கவும்", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "மாதத்திற்கு", premium_btn_choose: "இந்த திட்டத்தைத் தேர்ந்தெடு", premium_selected_info: "நீங்கள் தேர்ந்தெடுத்தது", premium_feature_all: "அனைத்து அம்சங்களும்", premium_feature_occupancy: "பேருந்து கூட்டத் தகவல்", premium_feature_support: "முன்னுரிமை ஆதரவு", premium_feature_ad_free: "விளம்பரமில்லா அனுபவம்",
+                // புதிய மொழிபெயர்ப்புகள்
+                label_role: "உங்கள் பங்கு", role_passenger: "பயணி", role_driver: "ஓட்டுநர்", role_conductor: "நடத்துனர்", section_community_stats: "சமூக புள்ளிவிவரம்",
+            },
+            en: {
+                app_title: "City Bus", bus_no_prefix: "Bus No:", nav_home: "Home", nav_explore: "Explore", nav_upload: "Upload", nav_profile: "Account", home_title: "Search for a Bus", home_greeting: "Upload some bus data to get started!", home_greeting_ready: "Have a great journey!", label_from: "Starting Point", label_to: "Destination", label_bus_no: "Bus Number", label_time_period: "Time Period*", label_departure_time: "Departure Time", btn_show_trip: "Show Trip", loading_text: "Searching...", no_trips_found: "No suitable trips found", error_select_locations: "Please select a starting point and destination.", error_no_trip_at_time: "No buses available after the selected time.", error_no_trips_on_route: "No user-uploaded trips found for this route.", explore_title: "Explore Routes", explore_subtitle: "Enter a location to find buses that pass through.", explore_placeholder: "e.g., Dharmapuri", explore_no_results: "No buses found for this location.", upload_title: "Upload Data", upload_subtitle: "Help the community by sharing bus information.", label_busNumber: "Bus Number*", label_district: "Taluk", label_startTime: "Start Time* (e.g., 6:40 AM)", label_endTime: "End Time* (e.g., 7:30 AM)", label_duration: "Trip Duration* (e.g., 50 min)", label_stops: "Stops*", label_stop_n: (n) => `Stop ${n}`, btn_add_stop: "Add More Stops", btn_submit: "Submit", time_morning: "Morning", time_afternoon: "Afternoon", time_evening: "Evening", time_night: "Night", card_departure: "Departure", card_arrival: "Arrival", card_total_time: "Total Time", next_buses_title: (busNo) => `Next Buses (No: ${busNo})`, tracking_now: "Bus is now at:", tracking_near: "is nearby.", tracking_eta: (loc, time) => `Approx. ${time} minutes to reach ${loc}.`, tracking_finished: (loc) => `Trip finished! The bus has reached ${loc}.`, stops_title: "Your Trip Stops", submit_success: "Thank you! Your information has been submitted successfully.", submit_spam: "This information has already been submitted multiple times.", submit_login_required: "Please log in to contribute.", duration_min: "min", duration_hour: "hour", duration_hr: "hr", label_kilometers: "Kilometers*", card_distance: "Distance", route_removed_success: "Route removed!", card_ticket_price: "Ticket Price", save_route: "Save Route", saved_routes_title: "Saved Routes", route_saved_success: "Route saved!", route_already_exists: "This route is already saved.", no_saved_routes: "You haven't saved any routes yet.", profile_signin_title: "Get Started", profile_signin_subtitle: "Sign in to see your contributions.", btn_signin_google: "Sign in with Google", welcome_back: (name) => `Welcome back, ${name}!`, label_email: "Email Address", label_password: "Password", btn_login: "Login", btn_logout: "Log Out", label_first_name: "First Name", label_last_name: "Last Name", label_confirm_password: "Confirm Password", btn_register: "Register", register_title: "Create a New Account", register_subtitle: "Join the community by registering.", link_to_register: "Don't have an account?", link_to_login: "Already have an account?", section_profile: "Profile", section_points_rewards: "Points & Rewards", section_my_contributions: "My Contributions", section_settings: "Settings", section_about: "About", section_premium: "Premium Features", total_contributions: "Total Contributions", total_points: "Total Points", leaderboard: "Leaderboard", city_level: "City Level", added_on: "Added on", no_contributions_yet: "You haven't uploaded any information yet.", dark_mode: "Dark Mode", language_option: "Language", notifications: "Notifications", btn_edit: "Edit", btn_delete: "Delete", delete_confirm_title: "Confirm Deletion", delete_confirm_text: "Are you sure you want to permanently delete this entry?", btn_cancel: "Cancel", delete_success: "Entry deleted successfully.", update_success: "Entry updated successfully.", btn_save_changes: "Save Changes", about_text: "This application is built to help find city bus timings and share new information. It's a community-driven effort that relies on user contributions.", developed_by: "Developed by", label_stop_time: "Time (6:50 AM)", label_stop_price: "Price (₹)", premium_title: "Choose Your Plan", premium_plan_1_title: "Smart Saver Pass", premium_plan_2_title: "Ultra Pro", premium_plan_3_title: "Basic", premium_per_month: "per month", premium_btn_choose: "Choose Plan", premium_selected_info: "You have selected", premium_feature_all: "All features unlocked", premium_feature_occupancy: "Bus Occupancy Info", premium_feature_support: "Priority Support", premium_feature_ad_free: "Ad-Free Experience",
+                // புதிய மொழிபெயர்ப்புகள்
+                label_role: "Your Role", role_passenger: "Passenger", role_driver: "Driver", role_conductor: "Conductor", section_community_stats: "Community Stats",
+            }
+        };
+
+        const formatDuration = (minutes, t) => { if (isNaN(minutes) || minutes < 0) return 'N/A'; if (minutes < 60) return `${minutes} ${t.duration_min}`; if (minutes === 60) return `1 ${t.duration_hour}`; const hours = Math.floor(minutes / 60); const remainingMinutes = minutes % 60; if (remainingMinutes === 0) return `${hours} ${t.duration_hour}`; return `${hours} ${t.duration_hr} ${remainingMinutes} ${t.duration_min}`; };
+        const timeToMinutes = (timeStr) => { if (!timeStr || !timeStr.includes(':')) return 0; const [time, modifier] = timeStr.split(' '); let [hours, minutes] = time.split(':').map(Number); if (isNaN(hours) || isNaN(minutes)) return 0; if (modifier && modifier.toUpperCase() === 'PM' && hours < 12) hours += 12; if (modifier && modifier.toUpperCase() === 'AM' && hours === 12) hours = 0; return hours * 60 + minutes; };
+
+
+        // =================================================================
+        // பகுதி 2: UI கூறுகள் (Components)
+        // =================================================================
+        
+        //**மாற்றம் 1: புதிய பாதுகாப்பு கூறு (Security Component)**
+        function SecuritySetup() {
+            useEffect(() => {
+                // Right-click-ஐத் தடுத்தல்
+                const handleContextMenu = (e) => {
+                    e.preventDefault();
+                };
+
+                // Keyboard shortcuts-ஐத் தடுத்தல்
+                const handleKeyDown = (e) => {
+                    if (
+                        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j')) || // Ctrl+Shift+I/J
+                        (e.ctrlKey && (e.key === 'U' || e.key === 'u')) || // Ctrl+U
+                        e.key === 'F12' // F12
+                    ) {
+                        e.preventDefault();
+                    }
+                };
+
+                document.addEventListener('contextmenu', handleContextMenu);
+                document.addEventListener('keydown', handleKeyDown);
+
+                // Component unmount ஆகும்போது event listeners-ஐ நீக்குதல்
+                return () => {
+                    document.removeEventListener('contextmenu', handleContextMenu);
+                    document.removeEventListener('keydown', handleKeyDown);
+                };
+            }, []);
+
+            return null; // இந்த கூறு எதையும் திரையில் காட்டாது
+        }
+
+        function Header({user, darkMode}) {
+            const { t } = useContext(LanguageContext);
+            const lightLogo = "https://uploads.onecompiler.io/3zky9aw9p/43wqca7q3/20250916_110056.png";
+            const darkLogo = "https://uploads.onecompiler.io/3zky9aw9p/43wve6tvy/20250916_160049.png";
+            
+            return (
+                <header className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-md sticky top-0 z-40 dark:border-b dark:border-slate-700">
+                    <div className="container mx-auto max-w-2xl flex justify-between items-center p-3">
+                        <img src={darkMode ? darkLogo : lightLogo} alt="App Logo" className="h-10 w-auto" />
+                        <div className="flex items-center space-x-3">
+                            <ion-icon name="notifications-outline" class="text-2xl bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent cursor-pointer"></ion-icon>
+                            {user ? (
+                                <img src={user.avatar} alt="User Avatar" className="w-8 h-8 rounded-full object-cover"/>
+                            ) : (
+                                <ion-icon name="person-circle-outline" class="text-3xl bg-gradient-to-r from-sky-500 to-indigo-500 bg-clip-text text-transparent cursor-pointer"></ion-icon>
+                            )}
+                        </div>
+                    </div>
+                </header>
+            );
+        }
+
+        function BottomNav({ currentPage, onNavigate }) {
+            const { t } = useContext(LanguageContext);
+            const getLinkClass = (pageName) => currentPage === pageName ? "text-blue-600 dark:text-blue-500" : "text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-500";
+            return (
+                <nav className="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm shadow-t-lg z-40 max-w-2xl mx-auto border-t dark:border-slate-700">
+                    <div className="flex justify-around items-center h-14">
+                        <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('home') }} className={`flex flex-col items-center ${getLinkClass('home')}`}>
+                            <ion-icon name={currentPage === 'home' ? "home" : "home-outline"} class="text-2xl"></ion-icon>
+                            <span className="text-xs font-medium tracking-wider">{t.nav_home}</span>
+                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('explore') }} className={`flex flex-col items-center ${getLinkClass('explore')}`}>
+                            <ion-icon name={currentPage === 'explore' ? "compass" : "compass-outline"} class="text-xl"></ion-icon>
+                            <span className="text-xs tracking-wider">{t.nav_explore}</span>
+                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('upload') }} className={`flex flex-col items-center ${getLinkClass('upload')}`}>
+                            <ion-icon name={currentPage === 'upload' ? "cloud-upload" : "cloud-upload-outline"} class="text-xl"></ion-icon>
+                            <span className="text-xs tracking-wider">{t.nav_upload}</span>
+                        </a>
+                        <a href="#" onClick={(e) => { e.preventDefault(); onNavigate('profile') }} className={`flex flex-col items-center ${getLinkClass('profile')}`}>
+                            <ion-icon name={currentPage === 'profile' ? "person" : "person-outline"} class="text-xl"></ion-icon>
+                            <span className="text-xs tracking-wider">{t.nav_profile}</span>
+                        </a>
+                    </div>
+                </nav>
+            );
+        }
+        
+        function LocationInput({ value, onChange, label, id, allStops, parentBgClass = 'bg-white dark:bg-slate-800' }) {
+            const [suggestions, setSuggestions] = useState([]);
+            const [showSuggestions, setShowSuggestions] = useState(false);
+            const wrapperRef = useRef(null);
+        
+            useEffect(() => {
+                function handleClickOutside(event) {
+                    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                        setShowSuggestions(false);
+                    }
+                }
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, [wrapperRef]);
+        
+            const handleChange = (e) => {
+                const inputValue = e.target.value;
+                onChange(inputValue);
+                if (inputValue.length > 0) {
+                    const uniqueStops = [...new Set(allStops)];
+                    const filteredSuggestions = uniqueStops
+                        .filter(stop => stop && stop.toLowerCase().includes(inputValue.toLowerCase()));
+                    setSuggestions(filteredSuggestions);
+                    setShowSuggestions(true);
+                } else {
+                    setShowSuggestions(false);
+                }
+            };
+        
+            const handleSuggestionClick = (location) => {
+                onChange(location);
+                setShowSuggestions(false);
+            };
+        
+            return (
+                <div className="relative" ref={wrapperRef}>
+                    <input id={id} type="text" value={value} onChange={handleChange} onFocus={() => value.length > 0 && setShowSuggestions(true)} className="block px-2.5 pb-2 pt-4 w-full text-base text-gray-900 dark:text-slate-100 bg-transparent rounded-lg border-2 border-gray-300 dark:border-slate-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 dark:focus:border-blue-500 peer" placeholder=" " />
+                    <label htmlFor={id} className={`absolute text-base text-gray-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 dark:peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1 ${parentBgClass}`}>{label}</label>
+                    {showSuggestions && suggestions.length > 0 && (
+                        <ul className="absolute z-20 w-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto">
+                            {suggestions.map((loc, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(loc)} className="p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 border-b dark:border-slate-600 last:border-b-0 text-sm text-gray-800 dark:text-slate-200">
+                                    {loc}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            );
+        }
+
+        function AutocompleteInput({ value, onChange, label, id, suggestions = [], required = false, type = "text", parentBgClass = 'bg-white dark:bg-slate-800' }) {
+            const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+            const [showSuggestions, setShowSuggestions] = useState(false);
+            const wrapperRef = useRef(null);
+        
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                        setShowSuggestions(false);
+                    }
+                };
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, [wrapperRef]);
+        
+            const handleChange = (e) => {
+                const inputValue = e.target.value;
+                onChange(inputValue);
+                if (inputValue.length > 0) {
+                    const filtered = suggestions.filter(suggestion => 
+                        suggestion.toString().toLowerCase().includes(inputValue.toLowerCase())
+                    );
+                    setFilteredSuggestions(filtered);
+                    setShowSuggestions(true);
+                } else {
+                    setShowSuggestions(false);
+                    setFilteredSuggestions([]);
+                }
+            };
+        
+            const handleSuggestionClick = (suggestion) => {
+                onChange(suggestion);
+                setShowSuggestions(false);
+            };
+
+            const inputProps = {
+                id, type, value, required,
+                onChange: handleChange,
+                onFocus: () => {
+                     if (value.length > 0) {
+                        const filtered = suggestions.filter(suggestion => 
+                            suggestion.toString().toLowerCase().includes(value.toLowerCase())
+                        );
+                        setFilteredSuggestions(filtered);
+                        setShowSuggestions(true);
+                    } else {
+                        setFilteredSuggestions(suggestions);
+                        setShowSuggestions(true);
+                    }
+                },
+                className: "block px-2.5 pb-2 pt-4 w-full text-base text-gray-900 dark:text-slate-100 bg-transparent rounded-lg border-2 border-gray-300 dark:border-slate-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 dark:focus:border-blue-500 peer",
+                placeholder: " "
+            };
+        
+            return (
+                <div className="relative" ref={wrapperRef}>
+                    <input {...inputProps} />
+                    <label htmlFor={id} className={`absolute text-base text-gray-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 dark:peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1 ${parentBgClass}`}>{label}</label>
+                    {showSuggestions && filteredSuggestions.length > 0 && (
+                        <ul className="absolute z-20 w-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto">
+                            {filteredSuggestions.map((item, index) => (
+                                <li key={index} onClick={() => handleSuggestionClick(item)} className="p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 border-b dark:border-slate-600 last:border-b-0 text-sm text-gray-800 dark:text-slate-200">
+                                    {item}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            );
+        }
+
+        function TalukAutocompleteInput({ value, onChange, label, id, talukList, language, required = false, parentBgClass = 'bg-white dark:bg-slate-800' }) {
+            const [filteredSuggestions, setFilteredSuggestions] = useState([]);
+            const [showSuggestions, setShowSuggestions] = useState(false);
+            const wrapperRef = useRef(null);
+
+            useEffect(() => {
+                const handleClickOutside = (event) => {
+                    if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+                        setShowSuggestions(false);
+                    }
+                };
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, []);
+
+            const handleChange = (e) => {
+                const inputValue = e.target.value;
+                onChange(inputValue);
+
+                if (inputValue.length > 0) {
+                    const lowerInput = inputValue.toLowerCase();
+                    const filtered = talukList.filter(taluk =>
+                        taluk.ta.toLowerCase().includes(lowerInput) ||
+                        taluk.en.toLowerCase().includes(lowerInput)
+                    );
+                    setFilteredSuggestions(filtered);
+                    setShowSuggestions(true);
+                } else {
+                    setFilteredSuggestions([]);
+                    setShowSuggestions(false);
+                }
+            };
+
+            const handleSuggestionClick = (taluk) => {
+                onChange(language === 'ta' ? taluk.ta : taluk.en);
+                setShowSuggestions(false);
+            };
+
+            return (
+                <div className="relative" ref={wrapperRef}>
+                    <input
+                        id={id}
+                        type="text"
+                        value={value}
+                        onChange={handleChange}
+                        onFocus={() => { if(value) handleChange({target: {value}}) }}
+                        required={required}
+                        className="block px-2.5 pb-2 pt-4 w-full text-base text-gray-900 dark:text-slate-100 bg-transparent rounded-lg border-2 border-gray-300 dark:border-slate-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 dark:focus:border-blue-500 peer"
+                        placeholder=" "
+                    />
+                    <label htmlFor={id} className={`absolute text-base text-gray-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] px-2 peer-focus:px-2 peer-focus:text-blue-600 dark:peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1 ${parentBgClass}`}>{label}</label>
+                    {showSuggestions && filteredSuggestions.length > 0 && (
+                        <ul className="absolute z-20 w-full bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg mt-1 shadow-lg max-h-40 overflow-y-auto">
+                            {filteredSuggestions.map((taluk) => (
+                                <li key={taluk.en} onClick={() => handleSuggestionClick(taluk)} className="p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 border-b dark:border-slate-600 last:border-b-0 text-sm text-gray-800 dark:text-slate-200">
+                                    {language === 'ta' ? taluk.ta : taluk.en}
+                                </li>
+                            ))}
+                        </ul>
+                    )}
+                </div>
+            );
+        }
+        
+        function SectionCard({ title, iconName, children }) {
+            return (
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
+                    <div className="flex items-center mb-3">
+                        <ion-icon name={iconName} class="text-xl text-blue-600 mr-3"></ion-icon>
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-slate-200">{title}</h3>
+                    </div>
+                    {children}
+                </div>
+            );
+        }
+
+        function ToggleSwitch({ label, enabled, setEnabled }) {
+            return (
+                <div className="flex items-center justify-between py-2">
+                    <span className="text-base text-gray-700 dark:text-slate-300">{label}</span>
+                    <button onClick={() => setEnabled(!enabled)} className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-300 ease-in-out focus:outline-none ${enabled ? 'bg-blue-600' : 'bg-gray-300 dark:bg-slate-700'}`}>
+                        <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform duration-300 ease-in-out ${enabled ? 'translate-x-6' : 'translate-x-1'}`} />
+                    </button>
+                </div>
+            );
+        }
+
+        function UpcomingTripsCard({ trips, t }) {
+            if (trips.length === 0) return null;
+            return (
+                <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg mt-6 animate-fade-in">
+                    <h2 className="text-xl font-semibold text-gray-800 dark:text-slate-200 mb-4">{t.next_buses_title(trips[0]?.busNumber)}</h2>
+                    <div className="space-y-3 max-h-60 overflow-y-auto pr-2">
+                        {trips.map((trip, index) => {
+                            const firstStop = trip.stops?.[0];
+                            const lastStop = trip.stops?.[trip.stops.length - 1];
+                            const duration = lastStop && firstStop ? timeToMinutes(lastStop.time) - timeToMinutes(firstStop.time) : 0;
+                            return (
+                                <div key={index} className="flex items-center justify-between p-2.5 bg-gray-50 dark:bg-slate-700/50 rounded-lg border-l-4 border-blue-400">
+                                    <div className="flex items-center">
+                                        <ion-icon name="time-outline" class="text-blue-500 mr-3 text-xl"></ion-icon>
+                                        <div>
+                                            <p className="font-bold text-base text-gray-800 dark:text-slate-200">{firstStop?.time} → {lastStop?.time}</p>
+                                            <p className="text-sm text-gray-600 dark:text-slate-400">
+                                                {firstStop?.name} → {lastStop?.name}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <span className="text-sm font-semibold text-gray-500 dark:text-slate-300">{formatDuration(duration, t)}</span>
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            );
+        }
+        
+        function ProfileListItem({ iconName, title, onClick }) {
+            return (
+                <button onClick={onClick} className="w-full flex items-center justify-between p-4 bg-white dark:bg-slate-800 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-200 shadow-sm border dark:border-slate-700/50">
+                    <div className="flex items-center">
+                        <ion-icon name={iconName} class="text-xl text-blue-600 dark:text-blue-400 mr-4"></ion-icon>
+                        <span className="text-base font-medium text-gray-800 dark:text-slate-200">{title}</span>
+                    </div>
+                    <ion-icon name="chevron-forward-outline" class="text-lg text-gray-400 dark:text-slate-500"></ion-icon>
+                </button>
+            );
+        }
+
+        function SubPageView({ title, iconName, onBack, children }) {
+            return (
+                <div className="animate-fade-in">
+                    <div className="flex items-center mb-4">
+                        <button onClick={onBack} className="p-2 mr-2 rounded-full hover:bg-gray-200 dark:hover:bg-slate-700 transition-all">
+                            <ion-icon name="arrow-back-outline" class="text-2xl text-gray-700 dark:text-slate-300"></ion-icon>
+                        </button>
+                        <div className="flex items-center">
+                           <ion-icon name={iconName} class="text-2xl text-blue-600 dark:text-blue-400 mr-3"></ion-icon>
+                           <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-200">{title}</h2>
+                        </div>
+                    </div>
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
+                        {children}
+                    </div>
+                </div>
+            );
+        }
+        
+        // =================================================================
+        // பகுதி 3: பக்கங்கள் (Pages)
+        // =================================================================
+        
+        function HomePage({ allBusData, onSearch, savedRoutes, onApplyRoute, onDeleteRoute }) {
+            const { t } = useContext(LanguageContext);
+            const [startPoint, setStartPoint] = useState("");
+            const [endPoint, setEndPoint] = useState("");
+            const [busNumber, setBusNumber] = useState("");
+            const [timeSlot, setTimeSlot] = useState(t.time_morning);
+            const [specificTime, setSpecificTime] = useState("");
+            const [departureTimes, setDepartureTimes] = useState([]);
+            const [isTimeDropdownOpen, setIsTimeDropdownOpen] = useState(false);
+            const timeDropdownRef = useRef(null);
+
+            const allStops = useMemo(() => [...new Set(allBusData.flatMap(trip => trip.stops?.map(stop => stop.name) || []))], [allBusData]);
+            
+            useEffect(() => { setTimeSlot(t.time_morning); }, [t]);
+            
+            useEffect(() => {
+                function handleClickOutside(event) {
+                    if (timeDropdownRef.current && !timeDropdownRef.current.contains(event.target)) {
+                        setIsTimeDropdownOpen(false);
+                    }
+                }
+                document.addEventListener("mousedown", handleClickOutside);
+                return () => document.removeEventListener("mousedown", handleClickOutside);
+            }, [timeDropdownRef]);
+
+            useEffect(() => {
+                if (!startPoint || !endPoint || !busNumber || startPoint === endPoint) {
+                    setDepartureTimes([]);
+                    setSpecificTime("");
+                    return;
+                }
+
+                const filteredTrips = allBusData.filter(trip => {
+                    if (!trip.busNumber || !trip.stops || trip.stops.length === 0) return false;
+                    
+                    const busMatch = trip.busNumber.toUpperCase() === busNumber.trim().toUpperCase();
+                    const stopNames = trip.stops.map(s => s.name);
+                    const startIndex = stopNames.indexOf(startPoint);
+                    const endIndex = stopNames.indexOf(endPoint);
+                    const routeMatch = startIndex !== -1 && endIndex !== -1 && startIndex < endIndex;
+
+                    return busMatch && routeMatch;
+                });
+                
+                const times = [...new Set(filteredTrips.map(trip => trip.stops[0]?.time).filter(Boolean))];
+                setDepartureTimes(times);
+                if (times.length > 0 && !times.includes(specificTime)) {
+                    setSpecificTime(times[0]);
+                } else if (times.length === 0) {
+                    setSpecificTime("");
+                }
+            }, [startPoint, endPoint, busNumber, allBusData]);
+        
+            const handleFormSubmit = (e) => { e.preventDefault(); onSearch({ startPoint, endPoint, busNumber, timeSlot, specificTime }); };
+            const handleSwapLocations = () => { const temp = startPoint; setStartPoint(endPoint); setEndPoint(temp); };
+            const handleTimeSelect = (selectedTime) => { setTimeSlot(selectedTime); setIsTimeDropdownOpen(false); };
+
+            return (
+                <div className="animate-fade-in">
+                    <div className="text-center mb-6">
+                        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">{t.home_title}</h2>
+                        <p className="text-gray-500 dark:text-slate-400 mt-1 text-base">{allBusData.length > 0 ? t.home_greeting_ready : t.home_greeting}</p>
+                    </div>
+
+                    <div className="mb-6">
+                        <h3 className="text-lg font-semibold text-gray-700 dark:text-slate-200 mb-2">{t.saved_routes_title}</h3>
+                        {savedRoutes.length > 0 ? (
+                            <div className="flex flex-wrap gap-2">
+                                {savedRoutes.map((route, index) => (
+                                    <div key={index} className="flex items-center bg-blue-100 dark:bg-slate-700 text-blue-800 dark:text-slate-300 text-sm font-semibold rounded-full">
+                                        <button onClick={() => onApplyRoute(setStartPoint, setEndPoint, route)} className="pl-3 pr-2 py-1 hover:bg-blue-200 dark:hover:bg-slate-600 rounded-l-full">
+                                            {route.startPoint} → {route.endPoint}
+                                        </button>
+                                        <button onClick={() => onDeleteRoute(index)} className="pr-2 pl-1 text-blue-500 hover:text-blue-700">
+                                           <ion-icon name="close-circle" class="text-base align-middle"></ion-icon>
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <p className="text-sm text-gray-500 dark:text-slate-400 text-center py-2 bg-gray-50 dark:bg-slate-800/50 rounded-lg">{t.no_saved_routes}</p>
+                        )}
+                    </div>
+
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg mb-6">
+                        <form onSubmit={handleFormSubmit} className="grid grid-cols-1 gap-y-6">
+                            <div className="grid grid-cols-1 md:grid-cols-5 gap-x-4 gap-y-6 items-center">
+                                <div className="md:col-span-2">
+                                    <LocationInput id="startPoint" label={t.label_from} value={startPoint} onChange={setStartPoint} allStops={allStops} />
+                                </div>
+                                <div className="text-center">
+                                    <button type="button" onClick={handleSwapLocations} className="p-2 rounded-full bg-gray-200 dark:bg-slate-700 text-gray-600 dark:text-slate-300 hover:bg-blue-500 hover:text-white transition-colors duration-200">
+                                        <ion-icon name="swap-horizontal-outline" class="text-2xl align-middle"></ion-icon>
+                                    </button>
+                                </div>
+                                <div className="md:col-span-2">
+                                     <LocationInput id="endPoint" label={t.label_to} value={endPoint} onChange={setEndPoint} allStops={allStops} />
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
+                                <div className="relative">
+                                    <input type="text" id="busNumber" value={busNumber} onChange={e => setBusNumber(e.target.value)} className="block px-2.5 pb-2 pt-4 w-full text-base text-gray-900 dark:text-slate-100 bg-transparent rounded-lg border-2 border-gray-300 dark:border-slate-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 dark:focus:border-blue-500 peer" placeholder=" " />
+                                    <label htmlFor="busNumber" className="absolute text-base text-gray-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 dark:peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">{t.label_bus_no}</label>
+                                </div>
+                                 <div className="relative">
+                                    <select id="specificTime" value={specificTime} onChange={e => setSpecificTime(e.target.value)} className="block px-2.5 pb-2 pt-4 w-full text-base text-gray-900 dark:text-slate-100 bg-transparent rounded-lg border-2 border-gray-300 dark:border-slate-600 appearance-none focus:outline-none focus:ring-0 focus:border-blue-600 dark:focus:border-blue-500 peer" disabled={departureTimes.length === 0}>
+                                        {departureTimes.length > 0 ? (departureTimes.map(time => <option key={time} value={time}>{time}</option>)) : (<option value="">{t.no_trips_found}</option>)}
+                                    </select>
+                                    <label htmlFor="specificTime" className="absolute text-base text-gray-500 dark:text-slate-400 duration-300 transform -translate-y-4 scale-75 top-2 z-10 origin-[0] bg-white dark:bg-slate-800 px-2 peer-focus:px-2 peer-focus:text-blue-600 dark:peer-focus:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:top-1/2 peer-focus:top-2 peer-focus:scale-75 peer-focus:-translate-y-4 start-1">{t.label_departure_time}</label>
+                                </div>
+                            </div>
+                           
+                            <div>
+                                <button type="submit" disabled={!specificTime} className="w-full text-white font-bold py-2.5 px-4 text-lg rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 tracking-wider bg-[linear-gradient(145deg,#4e2dce,#1b0d5f)]">
+                                    {t.btn_show_trip}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        function ExplorePage({ allBusData }) {
+            const { t } = useContext(LanguageContext);
+            const [searchTerm, setSearchTerm] = useState('');
+            const [suggestions, setSuggestions] = useState([]);
+            const allStops = useMemo(() => [...new Set(allBusData.flatMap(trip => trip.stops?.map(stop => stop.name) || []))], [allBusData]);
+            
+            const handleSearchChange = (value) => {
+                setSearchTerm(value);
+                if (value.length > 1) {
+                    const filteredSuggestions = allStops.filter(stop => stop && stop.toLowerCase().includes(value.toLowerCase())).slice(0, 5);
+                    setSuggestions(filteredSuggestions);
+                } else {
+                    setSuggestions([]);
+                }
+            };
+
+            const handleSuggestionClick = (stop) => { setSearchTerm(stop); setSuggestions([]); };
+            
+            const searchResults = useMemo(() => {
+                if (!searchTerm) return [];
+                const lowerCaseSearch = searchTerm.toLowerCase();
+                const relevantTrips = allBusData.filter(trip => trip.stops?.some(stop => stop.name && stop.name.toLowerCase().includes(lowerCaseSearch)));
+
+                const uniqueBuses = new Map();
+                relevantTrips.forEach(trip => {
+                    if (!trip.busNumber) return;
+                    const busKey = trip.busNumber.toUpperCase();
+                    if (!uniqueBuses.has(busKey)) {
+                        uniqueBuses.set(busKey, {
+                            busNumber: busKey,
+                            routeName: trip.stops && trip.stops.length > 0 ? `${trip.stops[0].name} ↔ ${trip.stops[trip.stops.length-1].name}` : 'Unknown Route'
+                        });
+                    }
+                });
+                return Array.from(uniqueBuses.values());
+            }, [searchTerm, allBusData]);
+        
+            return (
+                <div className="animate-fade-in">
+                    <div className="text-center mb-6">
+                        <h2 className="text-3xl font-bold bg-gradient-to-r from-teal-500 to-cyan-600 bg-clip-text text-transparent">{t.explore_title}</h2>
+                        <p className="text-gray-500 dark:text-slate-400 mt-1 text-base">{t.explore_subtitle}</p>
+                    </div>
+                    <div className="relative mb-6">
+                        <input type="text" value={searchTerm} onChange={(e) => handleSearchChange(e.target.value)} className="block p-3 w-full text-base text-gray-900 dark:text-slate-100 bg-white dark:bg-slate-800 rounded-lg border-2 border-gray-300 dark:border-slate-600 focus:outline-none focus:ring-0 focus:border-teal-500" placeholder={t.explore_placeholder} />
+                        <ion-icon name="search" class="absolute right-4 top-1/2 -translate-y-1/2 text-xl text-gray-400"></ion-icon>
+                        {suggestions.length > 0 && (
+                            <ul className="absolute z-10 w-full mt-1 bg-white dark:bg-slate-700 rounded-lg shadow-lg border border-gray-200 dark:border-slate-600">
+                                {suggestions.map((stop, index) => (
+                                    <li key={index} onClick={() => handleSuggestionClick(stop)} className="p-2.5 cursor-pointer hover:bg-gray-100 dark:hover:bg-slate-600 border-b dark:border-slate-600 last:border-b-0 text-sm text-gray-800 dark:text-slate-200">{stop}</li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+                    <div className="space-y-3">
+                        {searchTerm && searchResults.length === 0 && ( <p className="text-center text-gray-600 dark:text-slate-400 text-base">{t.explore_no_results}</p> )}
+                        {searchResults.map(bus => (
+                            <div key={bus.busNumber} className="bg-white dark:bg-slate-800 p-3 rounded-lg shadow-md border-l-4 border-teal-500">
+                                <p className="font-bold text-lg text-teal-700 dark:text-teal-400">{t.bus_no_prefix} {bus.busNumber}</p>
+                                <p className="text-gray-600 dark:text-slate-300 text-base">{bus.routeName}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        function UploadPage({ onSubmitData, initialData, onUpdateData, allBusData }) {
+            const { t, language } = useContext(LanguageContext);
+            const isEditing = !!initialData;
+
+            const dharmapuriTaluks = [
+                { ta: "தர்மபுரி", en: "Dharmapuri" }, { ta: "அதகப்பாடி", en: "Adhagapadi" }, { ta: "அதியமான்கோட்டை", en: "Adiyamankottai" }, { ta: "ஆட்டுக்காரன்பட்டி", en: "Aattukarampatti" }, { ta: "செட்டிக்கரை", en: "Chettikarai" }, { ta: "தடங்கம்", en: "Thadangam" }, { ta: "ஹளே தர்மபுரி", en: "Hale Dharmapuri" }, { ta: "இண்டூர்", en: "Indur" }, { ta: "கிருஷ்ணாபுரம்", en: "Krishnapuram" }, { ta: "குப்பூர்", en: "Kuppur" }, { ta: "மாதேமங்கலம்", en: "Mathemangalam" }, { ta: "நாகர்கூடல்", en: "Nagarkoodal" }, { ta: "நல்லம்பள்ளி", en: "Nallampalli" }, { ta: "நெசவாளர் காலனி", en: "Nesavalar Colony" }, { ta: "பாப்பாரப்பட்டி", en: "Papparapatti" }, { ta: "பென்னாகரம்", en: "Pennagaram" }, { ta: "சோகத்தூர்", en: "Sogathur" }, { ta: "வெள்ளாளப்பட்டி", en: "Vellalapatti" }, { ta: "வெண்ணம்பட்டி", en: "Vennampatty" }, { ta: "பிற இடம்", en: "Other" }
+            ].sort((a,b) => a.ta.localeCompare(b.ta, 'ta'));
+            
+            const getInitialFormState = () => ({
+                busNumber: initialData?.busNumber || '',
+                district: initialData?.district || '',
+                stops: initialData?.stops?.length > 0 ? initialData.stops : [{ name: '', time: '', price: '' }],
+            });
+
+            const [formData, setFormData] = useState(getInitialFormState);
+            const [status, setStatus] = useState({ success: null, message: '' });
+
+            const suggestions = useMemo(() => {
+                if (!allBusData) return { busNumbers: [], stopNames: [], times: [], prices: [] };
+                const busNumbers = [...new Set(allBusData.map(trip => trip.busNumber).filter(Boolean))];
+                const stopNames = [...new Set(allBusData.flatMap(trip => trip.stops?.map(s => s.name) || []).filter(Boolean))];
+                const times = [...new Set(allBusData.flatMap(trip => trip.stops?.map(s => s.time) || []).filter(Boolean))];
+                const prices = [...new Set(allBusData.flatMap(trip => trip.stops?.map(s => s.price) || []).filter(p => p !== null && p !== undefined))];
+                return { busNumbers, stopNames, times, prices };
+            }, [allBusData]);
+            
+            const handleAutocompleteChange = (id, value) => setFormData(prev => ({ ...prev, [id]: value }));
+            const handleStopChange = (index, field, value) => { const newStops = [...formData.stops]; newStops[index][field] = value; setFormData(prev => ({ ...prev, stops: newStops })); };
+            const addStopInput = () => setFormData(prev => ({ ...prev, stops: [...prev.stops, { name: '', time: '', price: '' }] }));
+            const removeStopInput = (index) => { if (formData.stops.length > 1) { const newStops = formData.stops.filter((_, i) => i !== index); setFormData(prev => ({ ...prev, stops: newStops })); } };
+            
+            const handleSubmit = async (e) => {
+                e.preventDefault();
+                const processedData = {
+                    ...formData,
+                    stops: formData.stops.map(stop => ({...stop, price: Number(stop.price) || 0 }))
+                };
+                const result = isEditing ? await onUpdateData(initialData.id, processedData) : await onSubmitData(processedData);
+                setStatus(result);
+                if(result.success && !isEditing) { 
+                    setFormData(getInitialFormState());
+                }
+                setTimeout(() => setStatus({ success: null, message: '' }), 5000);
+            };
+        
+            return (
+                <div className="animate-fade-in">
+                    <div className="text-center mb-6">
+                        <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">{isEditing ? t.btn_edit : t.upload_title}</h2>
+                        <p className="text-gray-500 dark:text-slate-400 mt-1 text-base">{t.upload_subtitle}</p>
+                    </div>
+                    {status.message && (
+                        <div className={`p-3 rounded-lg text-center mb-4 ${status.success ? 'bg-green-100 dark:bg-green-900/50 text-green-700 dark:text-green-300' : 'bg-red-100 dark:bg-red-900/50 text-red-700 dark:text-red-300'}`} role="alert">
+                            <p className="font-bold text-base">{status.message}</p>
+                        </div>
+                    )}
+                    <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-6">
+                                <AutocompleteInput
+                                    id="busNumber"
+                                    label={t.label_busNumber}
+                                    value={formData.busNumber || ''}
+                                    onChange={(value) => handleAutocompleteChange('busNumber', value)}
+                                    suggestions={suggestions.busNumbers}
+                                    required
+                                />
+                                <TalukAutocompleteInput
+                                    id="district"
+                                    label={t.label_district}
+                                    value={formData.district || ''}
+                                    onChange={(value) => handleAutocompleteChange('district', value)}
+                                    talukList={dharmapuriTaluks}
+                                    language={language}
+                                    required
+                                />
+                            </div>
+                           
+                            <div className="space-y-4">
+                                <label className="text-base font-medium text-gray-700 dark:text-slate-300">{t.label_stops}</label>
+                                {formData.stops.map((stop, index) => (
+                                    <div key={index} className="grid grid-cols-12 gap-2 items-center py-2 rounded-lg">
+                                        <div className="col-span-12 md:col-span-5">
+                                            <AutocompleteInput id={`stop_name_${index}`} label={t.label_stop_n(index + 1)} value={stop.name} onChange={(value) => handleStopChange(index, 'name', value)} suggestions={suggestions.stopNames} required />
+                                        </div>
+                                        <div className="col-span-6 md:col-span-3">
+                                             <AutocompleteInput id={`stop_time_${index}`} label={t.label_stop_time} value={stop.time} onChange={(value) => handleStopChange(index, 'time', value)} suggestions={suggestions.times} required />
+                                        </div>
+                                        <div className="col-span-5 md:col-span-3">
+                                            <AutocompleteInput id={`stop_price_${index}`} label={t.label_stop_price} type="number" value={stop.price} onChange={(value) => handleStopChange(index, 'price', value)} suggestions={suggestions.prices} required />
+                                        </div>
+                                        <div className="col-span-1 flex justify-center">{formData.stops.length > 1 && (<button type="button" onClick={() => removeStopInput(index)} className="text-red-500 hover:text-red-700"><ion-icon name="remove-circle" className="text-xl"></ion-icon></button>)}</div>
+                                    </div>
+                                ))}
+                                <button type="button" onClick={addStopInput} className="flex items-center justify-center w-full text-base text-blue-600 font-semibold py-2 px-3 border-2 border-dashed border-blue-400 rounded-lg hover:bg-blue-50 dark:text-blue-400 dark:border-blue-400/50 dark:hover:bg-blue-500/10">
+                                    <ion-icon name="add-circle-outline" className="mr-2 text-lg"></ion-icon>
+                                    {t.btn_add_stop}
+                                </button>
+                            </div>
+                            <div><button type="submit" className="w-full text-white font-bold py-2.5 px-4 text-lg rounded-lg hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 transition-all duration-300 tracking-wider bg-[linear-gradient(145deg,#4e2dce,#1b0d5f)]">{isEditing ? t.btn_save_changes : t.btn_submit}</button></div>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        function AuthPage({ onLogin, onRegister }) {
+            const { t, language } = useContext(LanguageContext);
+            const { darkMode } = useContext(ThemeContext);
+            const [isRegistering, setIsRegistering] = useState(false);
+            const [isSubmitting, setIsSubmitting] = useState(false);
+            const [error, setError] = useState('');
+            const [firstName, setFirstName] = useState('');
+            const [lastName, setLastName] = useState('');
+            const [email, setEmail] = useState('');
+            const [password, setPassword] = useState('');
+            const [confirmPassword, setConfirmPassword] = useState('');
+            const [role, setRole] = useState('passenger');
+            const [showPassword, setShowPassword] = useState(false);
+            const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+            
+            const lightLogo = "https://uploads.onecompiler.io/3zky9aw9p/43wqca7q3/20250916_110056.png";
+            const darkLogo = "https://uploads.onecompiler.io/3zky9aw9p/43wve6tvy/20250916_160049.png";
+
+            const resetForm = () => { setError(''); setFirstName(''); setLastName(''); setEmail(''); setPassword(''); setConfirmPassword(''); setRole('passenger'); setShowPassword(false); setShowConfirmPassword(false); };
+            const toggleAuthMode = (e) => { e.preventDefault(); setIsRegistering(!isRegistering); resetForm(); };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                setIsSubmitting(true);
+                setError('');
+                if (isRegistering) {
+                    if (password !== confirmPassword) { setError(language === 'ta' ? 'கடவுச்சொற்கள் பொருந்தவில்லை.' : 'Passwords do not match.'); setIsSubmitting(false); return; }
+                    const fullName = `${firstName} ${lastName}`.trim();
+                    onRegister(email, password, fullName, role, (success, errorMessage) => {
+                        setIsSubmitting(false);
+                        if (!success) { setError(errorMessage || (language === 'ta' ? 'பதிவு தோல்வியடைந்தது.' : 'Registration failed.')); }
+                    });
+                } else {
+                    onLogin(email, password, (success, errorMessage) => {
+                        setIsSubmitting(false);
+                        if (!success) { setError(errorMessage || (language === 'ta' ? 'உள்நுழைவு தோல்வியடைந்தது.' : 'Login failed.')); }
+                    });
+                }
+            };
+            
+            const inputClass = "block py-2.5 px-0 w-full text-base text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 focus:outline-none focus:ring-0 peer focus:border-transparent focus:bg-gradient-to-r focus:from-[#4e2dce] focus:to-[#1b0d5f] focus:bg-[length:100%_2px] focus:bg-no-repeat focus:bg-bottom";
+            const labelClass = "peer-focus:font-medium absolute text-base text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6";
+
+            return (
+                <div className="flex flex-col items-center justify-center pt-8 animate-fade-in">
+                    <div className="w-full max-w-sm bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-xl">
+                        <div className="text-center mb-6">
+                            <img src={darkMode ? darkLogo : lightLogo} alt="App Logo" className="h-14 w-auto mx-auto mb-4" />
+                            <h2 className="text-3xl font-bold text-gray-800 dark:text-slate-200">{isRegistering ? t.register_title : t.profile_signin_title}</h2>
+                            <p className="text-gray-500 dark:text-slate-400 mt-1 text-base">{isRegistering ? t.register_subtitle : t.profile_signin_subtitle}</p>
+                        </div>
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {isRegistering && (
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div className="relative z-0 w-full group"><input type="text" id="first_name" className={inputClass} placeholder=" " required value={firstName} onChange={(e) => setFirstName(e.target.value)} /><label htmlFor="first_name" className={labelClass}>{t.label_first_name}</label></div>
+                                    <div className="relative z-0 w-full group"><input type="text" id="last_name" className={inputClass} placeholder=" " required value={lastName} onChange={(e) => setLastName(e.target.value)}/><label htmlFor="last_name" className={labelClass}>{t.label_last_name}</label></div>
+                                </div>
+                            )}
+                            <div className="relative z-0 w-full group"><input type="email" id="email" className={inputClass} placeholder=" " required value={email} onChange={(e) => setEmail(e.target.value)} /><label htmlFor="email" className={labelClass}>{t.label_email}</label></div>
+                            <div className="relative z-0 w-full group"><input type={showPassword ? "text" : "password"} id="password" className={inputClass} placeholder=" " required value={password} onChange={(e) => setPassword(e.target.value)} /><label htmlFor="password" className={labelClass}>{t.label_password}</label><button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute end-0 top-3 text-gray-500 dark:text-gray-400"><ion-icon name={showPassword ? 'eye-off-outline' : 'eye-outline'} class="text-xl"></ion-icon></button></div>
+                            {isRegistering && (
+                                <div className="relative z-0 w-full group"><input type={showConfirmPassword ? "text" : "password"} id="confirm_password" className={inputClass} placeholder=" " required value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} /><label htmlFor="confirm_password" className={labelClass}>{t.label_confirm_password}</label><button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} className="absolute end-0 top-3 text-gray-500 dark:text-gray-400"><ion-icon name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'} class="text-xl"></ion-icon></button></div>
+                            )}
+                            {isRegistering && (
+                                <div className="pt-2">
+                                    <label className="text-base text-gray-500 dark:text-gray-400 mb-3 block">{t.label_role}</label>
+                                    <div className="flex justify-around items-center gap-2">
+                                        {['passenger', 'driver', 'conductor'].map(r => (
+                                            <button key={r} type="button" onClick={() => setRole(r)}
+                                                className={`flex-1 text-center py-2 px-3 rounded-lg border-2 transition-all duration-200 ${role === r ? 'bg-blue-600 text-white border-blue-600' : 'bg-transparent text-gray-700 dark:text-slate-300 border-gray-300 dark:border-slate-600 hover:border-blue-500'}`}>
+                                                {t[`role_${r}`]}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+                            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+                            <button type="submit" disabled={isSubmitting} className="w-full text-white font-bold py-3 px-4 text-lg rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500 dark:focus:ring-offset-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 tracking-wider flex items-center justify-center bg-[linear-gradient(145deg,#4e2dce,#1b0d5f)] hover:shadow-lg">{isSubmitting ? (<div className="w-6 h-6 border-2 border-t-transparent border-white rounded-full animate-spin"></div>) : (isRegistering ? t.btn_register : t.btn_login)}</button>
+                        </form>
+                        <p className="text-center text-sm text-gray-500 dark:text-slate-400 mt-6">{isRegistering ? t.link_to_login : t.link_to_register}{' '}<a href="#" onClick={toggleAuthMode} className="font-medium text-blue-600 hover:underline dark:text-blue-500">{isRegistering ? t.btn_login : t.btn_register}</a></p>
+                    </div>
+                </div>
+            );
+        }
+
+        function PremiumPage({ onBack }) {
+            const { t } = useContext(LanguageContext);
+            const [selectedPlan, setSelectedPlan] = useState('pro');
+
+            const plans = {
+                basic: { id: 'basic', title: t.premium_plan_3_title, price: 25, color: 'from-green-500 to-emerald-500' },
+                saver: { id: 'saver', title: t.premium_plan_1_title, price: 45, color: 'from-sky-500 to-indigo-500' },
+                pro: { id: 'pro', title: t.premium_plan_2_title, price: 99, color: 'from-purple-600 to-violet-700' }
+            };
+
+            const selectedPlanData = plans[selectedPlan];
+            
+            const PlanCard = ({ plan, isSelected, onSelect }) => (
+                <div onClick={() => onSelect(plan.id)}
+                    className={`p-5 rounded-xl border-2 transition-all duration-300 cursor-pointer ${isSelected ? `border-purple-500 bg-slate-900` : 'border-transparent bg-slate-800 hover:bg-slate-700'}`}>
+                    <h3 className={`text-2xl font-bold bg-gradient-to-r ${plan.color} bg-clip-text text-transparent`}>{plan.title}</h3>
+                    <p className="text-4xl font-bold my-2">₹{plan.price}<span className="text-base font-normal text-slate-400">/{t.premium_per_month}</span></p>
+                    {isSelected && (
+                         <div className="space-y-2 mt-4 text-slate-300 text-base">
+                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_all}</div>
+                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_occupancy}</div>
+                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_support}</div>
+                            <div className="flex items-center"><ion-icon name="checkmark-circle" class="text-purple-400 mr-2"></ion-icon>{t.premium_feature_ad_free}</div>
+                        </div>
+                    )}
+                </div>
+            );
+
+            return (
+                 <div className="animate-fade-in text-white">
+                    <div className="flex items-center mb-4">
+                        <button onClick={onBack} className="p-2 mr-2 rounded-full hover:bg-slate-700 transition-all">
+                            <ion-icon name="arrow-back-outline" class="text-2xl text-slate-300"></ion-icon>
+                        </button>
+                        <h2 className="text-2xl font-bold text-slate-200">{t.premium_title}</h2>
+                    </div>
+                    <div className="space-y-4">
+                        <PlanCard plan={plans.pro} isSelected={selectedPlan === 'pro'} onSelect={setSelectedPlan} />
+                        <PlanCard plan={plans.saver} isSelected={selectedPlan === 'saver'} onSelect={setSelectedPlan} />
+                        <PlanCard plan={plans.basic} isSelected={selectedPlan === 'basic'} onSelect={setSelectedPlan} />
+
+                        <div className="pt-4">
+                             <div className="text-center bg-slate-800 p-3 rounded-lg">
+                                <p className="text-sm text-slate-400">{t.premium_selected_info}</p>
+                                <p className="text-lg font-bold">{selectedPlanData.title} - ₹{selectedPlanData.price}/{t.premium_per_month}</p>
+                            </div>
+                            <button className={`w-full text-white font-bold py-3 mt-4 px-4 text-lg rounded-lg transition-all duration-300 bg-gradient-to-r ${selectedPlanData.color} hover:shadow-lg hover:shadow-purple-500/30`}>
+                                {t.premium_btn_choose}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        
+        function ProfilePage({ user, userSubmissions, onAvatarChange, onLogout, onEdit, onDelete, allBusData, userStats }) {
+            const { t, language, setLanguage } = useContext(LanguageContext);
+            const { darkMode, setDarkMode } = useContext(ThemeContext);
+            const [activeSection, setActiveSection] = useState('main'); 
+            
+            const fileInputRef = useRef(null);
+            const handleAvatarClick = () => fileInputRef.current.click();
+            const handleFileChange = (event) => { if (event.target.files[0]) onAvatarChange(URL.createObjectURL(event.target.files[0])); };
+            
+            const POINTS_PER_CONTRIBUTION = 5;
+            const contributionCount = userSubmissions.length;
+            const totalPoints = contributionCount * POINTS_PER_CONTRIBUTION;
+            const formatDate = (dateString) => { if (!dateString) return ''; const date = new Date(dateString); return date.toLocaleDateString(language === 'ta' ? 'ta-IN' : 'en-US', { year: 'numeric', month: 'short', day: 'numeric' }); };
+            
+            const leaderboardData = useMemo(() => {
+                const userContributions = {};
+                
+                allBusData.forEach(trip => {
+                    if (trip.userId && trip.userName) {
+                        if (!userContributions[trip.userId]) {
+                            userContributions[trip.userId] = {
+                                name: trip.userName,
+                                points: 0,
+                                isCurrentUser: user && trip.userId === user.uid 
+                            };
+                        }
+                        userContributions[trip.userId].points += POINTS_PER_CONTRIBUTION;
+                    }
+                });
+
+                const leaderboardArray = Object.values(userContributions)
+                                             .sort((a, b) => b.points - a.points);
+                return leaderboardArray;
+            }, [allBusData, user]);
+
+            if (activeSection === 'main') {
+                return (
+                    <div className="animate-fade-in space-y-5">
+                        <SectionCard title={t.section_profile} iconName="person-circle-outline">
+                            <div className="flex items-start space-x-4">
+                                <div className="relative">
+                                    <img src={user.avatar} alt="User Avatar" className="w-20 h-20 rounded-full shadow-md object-cover" />
+                                    <input type="file" ref={fileInputRef} onChange={handleFileChange} className="hidden" accept="image/*" />
+                                    <button onClick={handleAvatarClick} className="absolute -bottom-1 -right-1 bg-blue-600 text-white rounded-full p-1.5 leading-none hover:bg-blue-700"><ion-icon name="camera" class="text-sm"></ion-icon></button>
+                                </div>
+                                <div className="flex-1 pt-1">
+                                    <p className="text-base text-gray-500 dark:text-slate-400 mb-1">Hello 👋,</p>
+                                    <h2 className="text-2xl font-bold text-gray-800 dark:text-slate-100 -mt-2">{user.name}</h2>
+                                    <p className="text-base text-gray-500 dark:text-slate-400 mt-1">{user.email}</p>
+                                    <p className="text-sm font-semibold capitalize bg-blue-100 dark:bg-slate-700 text-blue-700 dark:text-blue-300 px-2 py-0.5 rounded-full inline-block mt-2">
+                                        {t[`role_${user.role || 'passenger'}`]}
+                                    </p>
+                                </div>
+                            </div>
+                        </SectionCard>
+                        <div className="space-y-3 pt-2">
+                            <ProfileListItem title={t.section_points_rewards} iconName="trophy-outline" onClick={() => setActiveSection('rewards')} />
+                            <ProfileListItem title={t.section_my_contributions} iconName="list-outline" onClick={() => setActiveSection('contributions')} />
+                            <ProfileListItem title={t.section_settings} iconName="settings-outline" onClick={() => setActiveSection('settings')} />
+                             <ProfileListItem title={t.section_premium} iconName="diamond-outline" onClick={() => setActiveSection('premium')} />
+                            <ProfileListItem title={t.section_about} iconName="information-circle-outline" onClick={() => setActiveSection('about')} />
+                        </div>
+                        <div className="mt-6">
+                            <button onClick={onLogout} className="w-full flex items-center justify-center bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 text-lg rounded-lg transition-colors"><ion-icon name="log-out-outline" class="mr-2 text-xl"></ion-icon>{t.btn_logout}</button>
+                        </div>
+                    </div>
+                );
+            }
+
+            if (activeSection === 'rewards') return <SubPageView title={t.section_points_rewards} iconName="trophy-outline" onBack={() => setActiveSection('main')}><div className="grid grid-cols-2 gap-4 mb-4"><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_contributions}</p><p className="text-2xl font-bold text-blue-700 dark:text-blue-400">{contributionCount}</p></div><div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg text-center"><p className="text-sm text-gray-600 dark:text-slate-400">{t.total_points}</p><p className="text-2xl font-bold text-green-700 dark:text-green-400">{totalPoints}</p></div></div><h4 className="font-semibold text-gray-700 dark:text-slate-300 mb-2">{t.leaderboard} <span className="text-xs font-normal text-gray-500">({t.city_level})</span></h4><div className="space-y-2">{leaderboardData.map((entry, index) => (<div key={index} className={`flex items-center p-2 rounded-lg ${entry.isCurrentUser ? 'bg-blue-100 dark:bg-slate-700/80 border border-blue-300 dark:border-blue-500' : ''}`}><span className="font-bold text-gray-600 dark:text-slate-400 mr-3">{index + 1}.</span><span className="flex-1 font-medium text-gray-800 dark:text-slate-200">{entry.name}</span><span className="font-bold text-blue-600 dark:text-blue-400">{entry.points} pts</span></div>))}</div></SubPageView>;
+            if (activeSection === 'contributions') return <SubPageView title={t.section_my_contributions} iconName="list-outline" onBack={() => setActiveSection('main')}>{contributionCount > 0 ? (<div className="space-y-3 max-h-[65vh] overflow-y-auto pr-2">{userSubmissions.map((sub) => (<div key={sub.id} className="p-3 bg-gray-50 dark:bg-slate-700/50 rounded-lg border border-gray-200 dark:border-slate-700"><div className="flex justify-between items-start"><div><p className="font-bold text-base text-gray-700 dark:text-slate-200">{t.bus_no_prefix} {sub.busNumber}</p>{sub.stops && sub.stops.length > 0 ? (<p className="text-sm text-gray-600 dark:text-slate-300">{sub.stops[0].name} → {sub.stops[sub.stops.length - 1].name}</p>) : (<p className="text-sm text-red-500 italic">Route info unavailable</p>)}{sub.submissionDate && <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">{t.added_on}: {formatDate(sub.submissionDate)}</p>}</div><div className="flex items-center space-x-3"><button onClick={() => onEdit(sub)} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 text-lg"><ion-icon name="create-outline"></ion-icon></button><button onClick={() => onDelete(sub.id)} className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-lg"><ion-icon name="trash-outline"></ion-icon></button></div></div></div>))}</div>) : (<p className="text-center text-gray-500 dark:text-slate-400 py-4 text-base">{t.no_contributions_yet}</p>)}</SubPageView>;
+            if (activeSection === 'settings') return <SubPageView title={t.section_settings} iconName="settings-outline" onBack={() => setActiveSection('main')}><div className="space-y-2 divide-y dark:divide-slate-700"><ToggleSwitch label={t.dark_mode} enabled={darkMode} setEnabled={setDarkMode} /><div className="flex items-center justify-between py-2"><span className="text-base text-gray-700 dark:text-slate-300">{t.language_option}</span><select value={language} onChange={e => setLanguage(e.target.value)} className="bg-gray-50 dark:bg-slate-700 border border-gray-300 dark:border-slate-600 text-gray-900 dark:text-slate-200 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-1.5"><option value="ta">தமிழ்</option><option value="en">English</option></select></div></div></SubPageView>;
+            if (activeSection === 'about') return (
+                <SubPageView title={t.section_about} iconName="information-circle-outline" onBack={() => setActiveSection('main')}>
+                    <p className="text-base text-gray-600 dark:text-slate-300 leading-relaxed">{t.about_text}</p>
+                    <div className="mt-6 border-t dark:border-slate-700 pt-4">
+                        <h4 className="font-semibold text-lg text-gray-700 dark:text-slate-300 mb-3">{t.section_community_stats}</h4>
+                        <div className="grid grid-cols-3 gap-3 text-center">
+                             <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
+                                <ion-icon name="people-outline" class="text-3xl text-blue-500 mx-auto"></ion-icon>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.passenger}</p>
+                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_passenger}</p>
+                             </div>
+                             <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
+                                <ion-icon name="car-sport-outline" class="text-3xl text-green-500 mx-auto"></ion-icon>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.driver}</p>
+                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_driver}</p>
+                             </div>
+                              <div className="bg-gray-100 dark:bg-slate-700 p-3 rounded-lg">
+                                <ion-icon name="reader-outline" class="text-3xl text-orange-500 mx-auto"></ion-icon>
+                                <p className="text-2xl font-bold text-gray-800 dark:text-slate-100">{userStats.conductor}</p>
+                                <p className="text-sm font-medium text-gray-500 dark:text-slate-400">{t.role_conductor}</p>
+                             </div>
+                        </div>
+                    </div>
+                    <p className="text-sm text-center text-gray-500 dark:text-slate-400 mt-6 pt-4 border-t dark:border-slate-700">{t.developed_by}: <span className="font-semibold">EV Sanjeevan</span></p>
+                </SubPageView>
+            );
+            if (activeSection === 'premium') return <PremiumPage onBack={() => setActiveSection('main')} />;
+            
+            return null;
+        }
+
+        // =================================================================
+        // பகுதி 4: முக்கிய செயலி (Main Application)
+        // =================================================================
+        function App() {
+            const [language, setLanguage] = useState('ta');
+            const [currentPage, setCurrentPage] = useState('home'); 
+            const [user, setUser] = useState(null); 
+            const [authChecked, setAuthChecked] = useState(false);
+            const [searchParams, setSearchParams] = useState(null);
+            const [loading, setLoading] = useState(true);
+            const [error, setError] = useState("");
+            const [mainTrip, setMainTrip] = useState(null);
+            const [upcomingTrips, setUpcomingTrips] = useState([]);
+            const [displayStops, setDisplayStops] = useState([]); 
+            const [currentStopIndex, setCurrentStopIndex] = useState(0);
+            const intervalRef = useRef(null);
+            const [allBusData, setAllBusData] = useState([]);
+            const [saveStatus, setSaveStatus] = useState('');
+            const [savedRoutes, setSavedRoutes] = useState([]);
+            const [darkMode, setDarkMode] = useState(false);
+            const [editingTrip, setEditingTrip] = useState(null);
+            const [userStats, setUserStats] = useState({ passenger: 0, driver: 0, conductor: 0 });
+
+            useEffect(() => {
+                const { db, firebase } = window;
+                if (!db || !firebase) { console.error("Firebase is not initialized yet."); setLoading(false); return; }
+                const unsubscribe = firebase.onSnapshot(firebase.collection(db, "busTrips"), (querySnapshot) => {
+                    const tripsData = querySnapshot.docs.map(doc => {
+                        const data = doc.data();
+                        return { id: doc.id, ...data, stops: data.stops || [], submissionDate: data.submissionDate?.toDate ? data.submissionDate.toDate().toISOString() : null };
+                    });
+                    setAllBusData(tripsData); setLoading(false); 
+                }, (error) => { console.error("Error fetching data from Firestore: ", error); setError("Error fetching data."); setLoading(false); });
+                return () => unsubscribe();
+            }, []);
+            
+            useEffect(() => {
+                const { db, firebase } = window;
+                if (!db || !firebase) return;
+                const usersCollection = firebase.collection(db, "users");
+                const unsubscribe = firebase.onSnapshot(usersCollection, (snapshot) => {
+                    let stats = { passenger: 0, driver: 0, conductor: 0 };
+                    snapshot.docs.forEach(doc => {
+                        const userData = doc.data();
+                        if(userData.role && stats.hasOwnProperty(userData.role)) {
+                            stats[userData.role]++;
+                        }
+                    });
+                    setUserStats(stats);
+                });
+                return () => unsubscribe();
+            }, []);
+
+            useEffect(() => {
+                const { auth, firebaseAuth } = window;
+                if (!auth || !firebaseAuth) return;
+                const unsubscribe = firebaseAuth.onAuthStateChanged(auth, (firebaseUser) => {
+                    if (firebaseUser) { handleUserLogin(firebaseUser); } else { setUser(null); }
+                    setAuthChecked(true);
+                });
+                return () => unsubscribe();
+            }, []);
+
+            useEffect(() => { const routesFromStorage = localStorage.getItem('cityBusSavedRoutes'); if (routesFromStorage) { setSavedRoutes(JSON.parse(routesFromStorage)); } }, []);
+            useEffect(() => { localStorage.setItem('cityBusSavedRoutes', JSON.stringify(savedRoutes)); }, [savedRoutes]);
+            useEffect(() => { if (darkMode) document.documentElement.classList.add('dark'); else document.documentElement.classList.remove('dark'); }, [darkMode]);
+
+            const t = useMemo(() => { const baseLang = translations[language] || translations['ta']; const fallbackLang = translations['ta']; return new Proxy(baseLang, { get(target, prop) { return target[prop] || fallbackLang[prop]; } }); }, [language]);
+            
+            const handleUserLogin = async (firebaseUser) => {
+                const { db, firebase } = window;
+                const userDocRef = firebase.doc(db, "users", firebaseUser.uid);
+                const userDoc = await firebase.getDoc(userDocRef);
+                
+                let userData;
+
+                if (userDoc.exists()) {
+                    userData = userDoc.data();
+                } else {
+                    console.log(`User ${firebaseUser.uid} not found in Firestore. Creating new entry.`);
+                    userData = {
+                        name: firebaseUser.displayName || firebaseUser.email.split('@')[0],
+                        email: firebaseUser.email,
+                        role: 'passenger',
+                        createdAt: firebase.serverTimestamp()
+                    };
+                    await firebase.setDoc(userDocRef, userData);
+                }
+                
+                setUser({ 
+                    uid: firebaseUser.uid, 
+                    name: firebaseUser.displayName || firebaseUser.email.split('@')[0], 
+                    email: firebaseUser.email, 
+                    avatar: firebaseUser.photoURL || `https://api.dicebear.com/8.x/initials/svg?seed=${firebaseUser.displayName || firebaseUser.email}`,
+                    role: userData.role || 'passenger'
+                }); 
+            };
+            
+            const handleLogout = () => { window.firebaseAuth.signOut(window.auth).then(() => { setCurrentPage('home'); }).catch((error) => console.error('Sign out error:', error)); };
+            const handleToggleSaveRoute = () => { if (!searchParams) return; const currentRoute = { startPoint: searchParams.startPoint, endPoint: searchParams.endPoint }; const isExisting = savedRoutes.some(r => r.startPoint === currentRoute.startPoint && r.endPoint === currentRoute.endPoint); if (isExisting) { setSavedRoutes(savedRoutes.filter(r => r.startPoint !== currentRoute.startPoint || r.endPoint !== currentRoute.endPoint)); setSaveStatus(t.route_removed_success); } else { setSavedRoutes(prev => [...prev, currentRoute]); setSaveStatus(t.route_saved_success); } setTimeout(() => setSaveStatus(''), 3000); };
+            const handleDeleteRoute = (indexToDelete) => { setSavedRoutes(prev => prev.filter((_, index) => index !== indexToDelete)); };
+            const handleApplyRoute = (setStart, setEnd, route = null) => { if (route) { setStart(route.startPoint); setEnd(route.endPoint); } };
+            const handleEmailLogin = (email, password, callback) => { window.firebaseAuth.signInWithEmailAndPassword(window.auth, email, password).then(cred => { callback(true); }).catch(err => callback(false, err.message)); };
+            
+            const handleRegister = (email, password, name, role, callback) => {
+                const { auth, firebaseAuth, db, firebase } = window;
+                firebaseAuth.createUserWithEmailAndPassword(auth, email, password)
+                    .then(cred => {
+                        return firebaseAuth.updateProfile(cred.user, { displayName: name })
+                            .then(() => {
+                                const userDocRef = firebase.doc(db, "users", cred.user.uid);
+                                return firebase.setDoc(userDocRef, {
+                                    name: name,
+                                    email: email,
+                                    role: role,
+                                    createdAt: firebase.serverTimestamp()
+                                });
+                            });
+                    })
+                    .then(() => {
+                        callback(true);
+                    })
+                    .catch(err => callback(false, err.message));
+            };
+
+            const handleAvatarChange = (newAvatarUrl) => { if (user) setUser(prevUser => ({...prevUser, avatar: newAvatarUrl})); };
+            
+            const handleUploadSubmit = async (data) => {
+                const { db, firebase } = window;
+                if (!user) return { success: false, message: t.submit_login_required };
+                try {
+                    await firebase.addDoc(firebase.collection(db, "busTrips"), { ...data, userId: user.uid, userName: user.name, submissionDate: firebase.serverTimestamp() });
+                    return { success: true, message: t.submit_success }; 
+                } catch (e) { console.error("Error adding document: ", e); return { success: false, message: "Error submitting." }; }
+            };
+
+            const handleDeleteTrip = async (tripId) => {
+                const { db, firebase } = window;
+                if (!window.confirm(t.delete_confirm_text)) return;
+                try { await firebase.deleteDoc(firebase.doc(db, "busTrips", tripId)); alert(t.delete_success); } 
+                catch (error) { console.error("Error deleting document: ", error); alert("Error deleting."); }
+            };
+            
+            const handleEditTrip = (trip) => { setEditingTrip(trip); setCurrentPage('upload'); };
+
+            const handleUpdateTrip = async (tripId, updatedData) => {
+                 const { db, firebase } = window;
+                 const tripRef = firebase.doc(db, "busTrips", tripId);
+                 try {
+                     await firebase.updateDoc(tripRef, updatedData);
+                     setEditingTrip(null); setCurrentPage('profile');
+                     return { success: true, message: t.update_success };
+                 } catch (error) { console.error("Error updating document: ", error); return { success: false, message: "Error updating." }; }
+            };
+
+            const handleSearch = (params) => {
+                setLoading(true); setError(""); setMainTrip(null); setUpcomingTrips([]); setDisplayStops([]); setSearchParams(params);
+                if (!params.startPoint || !params.endPoint) { setError(t.error_select_locations); setLoading(false); return; }
+                
+                setTimeout(() => {
+                    const foundTrip = allBusData.find(trip => {
+                        if (!trip.busNumber || !trip.stops || trip.stops.length === 0) return false;
+                        const stopNames = trip.stops.map(s => s.name);
+                        return trip.busNumber.toUpperCase() === params.busNumber.trim().toUpperCase() &&
+                               trip.stops[0].time === params.specificTime &&
+                               stopNames.includes(params.startPoint) &&
+                               stopNames.includes(params.endPoint);
+                    });
+
+                    if (foundTrip) {
+                        setMainTrip(foundTrip);
+                        const startIndex = foundTrip.stops.findIndex(s => s.name === params.startPoint);
+                        const endIndex = foundTrip.stops.findIndex(s => s.name === params.endPoint);
+                        if (startIndex !== -1 && endIndex !== -1 && startIndex < endIndex) { 
+                            setDisplayStops(foundTrip.stops.slice(startIndex, endIndex + 1)); 
+                        } else { 
+                            setError(t.error_no_trip_at_time); setMainTrip(null); 
+                        }
+                    } else {
+                        setError(t.error_no_trips_on_route);
+                    }
+                    setLoading(false);
+                }, 1000);
+            };
+
+            useEffect(() => { if (intervalRef.current) clearInterval(intervalRef.current); if (mainTrip && displayStops.length > 0) { setCurrentStopIndex(0); intervalRef.current = setInterval(() => { setCurrentStopIndex(prevIndex => { if (prevIndex >= displayStops.length - 1) { clearInterval(intervalRef.current); return prevIndex; } return prevIndex + 1; }); }, 4000); } return () => clearInterval(intervalRef.current); }, [mainTrip, displayStops]);
+            
+            const eta = displayStops.length > 0 ? (displayStops.length - 1 - currentStopIndex) * 4 : 0;
+            const handleNavigate = (page) => { if (page !== 'upload') { setEditingTrip(null); } setCurrentPage(page); };
+
+            const renderPage = () => {
+                const isRouteSaved = searchParams ? savedRoutes.some(r => r.startPoint === searchParams.startPoint && r.endPoint === searchParams.endPoint) : false;
+                
+                const renderTripDetails = () => {
+                    if (!mainTrip) return null;
+                    const startStop = displayStops[0];
+                    const endStop = displayStops[displayStops.length - 1];
+                    if (!startStop || !endStop) return null;
+
+                    const ticketPrice = Math.abs((endStop.price || 0) - (startStop.price || 0));
+                    const durationInMinutes = Math.abs(timeToMinutes(endStop.time) - timeToMinutes(startStop.time));
+
+                    return (
+                        <div className="space-y-6 mt-8 animate-fade-in">
+                            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white rounded-2xl shadow-2xl p-4 overflow-hidden relative">
+                                <div className="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full"></div>
+                                <div className="absolute -bottom-12 -left-8 w-24 h-24 bg-white/10 rounded-full"></div>
+                                <div className="relative z-10">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="min-w-0">
+                                            <h2 className="text-2xl font-bold truncate">{`${searchParams.startPoint} → ${searchParams.endPoint}`}</h2>
+                                            <p className="text-blue-200 font-medium text-base truncate">{`${t.bus_no_prefix} ${searchParams.busNumber.toUpperCase()}`}</p>
+                                        </div>
+                                        <button onClick={handleToggleSaveRoute} className="bg-white/20 hover:bg-white/30 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-200 flex-shrink-0 ml-2">
+                                            <ion-icon name={isRouteSaved ? "star" : "star-outline"} class={`text-2xl transition-colors ${isRouteSaved ? 'text-yellow-400' : 'text-white'}`}></ion-icon>
+                                        </button>
+                                    </div>
+                                    {saveStatus && <p className={`text-center text-sm rounded p-1 mb-3 ${saveStatus === t.route_saved_success ? 'bg-green-500' : 'bg-yellow-500'}`}>{saveStatus}</p>}
+                                    <div className="flex justify-between items-center my-4">
+                                        <div className="text-center"> <p className="text-base text-blue-200">{t.card_departure}</p> <p className="text-2xl font-bold">{startStop.time}</p> </div>
+                                        <div className="flex-grow flex items-center mx-3"> <div className="w-full border-t-2 border-dashed border-blue-300/50"></div> <ion-icon name="bus" class="mx-2 text-xl text-blue-200"></ion-icon> <div className="w-full border-t-2 border-dashed border-blue-300/50"></div> </div>
+                                        <div className="text-center"> <p className="text-base text-blue-200">{t.card_arrival}</p> <p className="text-2xl font-bold">{endStop.time}</p> </div>
+                                    </div>
+                                    <div className="border-t border-white/20 pt-3 mt-3 grid grid-cols-2 divide-x divide-white/20 text-center">
+                                        <div className="flex flex-col justify-center items-center"><ion-icon name="time-outline" class="text-lg text-blue-200 mb-1"></ion-icon><p className="font-semibold text-base">{formatDuration(durationInMinutes, t)}</p><p className="text-xs text-blue-300">{t.card_total_time}</p></div>
+                                        <div className="flex flex-col justify-center items-center"><ion-icon name="cash-outline" class="text-lg text-blue-200 mb-1"></ion-icon><p className="font-semibold text-base"><span className="font-bold">₹{ticketPrice}</span></p><p className="text-xs text-blue-300">{t.card_ticket_price}</p></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white p-3 rounded-xl shadow-lg"> <div className="flex items-center"> <div className="animate-pulse mr-3"> <ion-icon name="navigate-circle" class="text-3xl"></ion-icon> </div> <div> <p className="font-bold text-base">{t.tracking_now}</p> { currentStopIndex < displayStops.length - 1 ? ( <p className="text-base"> <span className="font-semibold">{displayStops[currentStopIndex].name}</span> {t.tracking_near} <br/>{t.tracking_eta(searchParams.endPoint, <span className="font-bold">{eta}</span>)} </p> ) : ( <p className="font-semibold text-base">{t.tracking_finished(displayStops[currentStopIndex].name)}</p> )} </div> </div> </div>
+                            <div className="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-lg"> <h2 className="text-2xl font-semibold text-gray-800 dark:text-slate-200 mb-4">{t.stops_title}</h2> <ol className="relative border-l border-gray-300 dark:border-slate-700 ml-2"> {displayStops.map((stop, index) => { const isCompleted = index < currentStopIndex; const isCurrent = index === currentStopIndex; const circleClass = isCompleted ? 'bg-gradient-to-br from-green-400 to-green-600' : isCurrent ? 'bg-gradient-to-br from-blue-500 to-indigo-600 animate-bounce' : 'bg-gradient-to-br from-gray-300 to-gray-500'; return ( <li key={index} className="mb-5 ml-5"> <span className={`absolute flex items-center justify-center w-5 h-5 rounded-full -left-2.5 ring-4 ring-white dark:ring-slate-800 ${circleClass}`}> <ion-icon name={isCompleted ? 'checkmark-outline' : 'bus-outline'} class="text-white text-xs"></ion-icon> </span> <h3 className={`font-semibold text-lg ${isCompleted || isCurrent ? 'text-gray-900 dark:text-slate-100' : 'text-gray-500 dark:text-slate-400'}`}>{stop.name}</h3> <p className={`text-sm ${isCompleted || isCurrent ? 'text-gray-700 dark:text-slate-300' : 'text-gray-500 dark:text-slate-500'}`}>{stop.time} | ₹{stop.price}</p> </li> ); })} </ol> </div>
+                        </div>
+                    );
+                };
+
+                switch(currentPage) {
+                    case 'home': return ( <div> <HomePage allBusData={allBusData} onSearch={handleSearch} savedRoutes={savedRoutes} onApplyRoute={handleApplyRoute} onDeleteRoute={handleDeleteRoute}/> {loading && <p className="text-center text-base dark:text-slate-300 mt-4">{t.loading_text}</p>} {error && <div className="bg-red-100 dark:bg-red-900/40 border text-center border-red-400 dark:border-red-500/50 text-red-700 dark:text-red-300 px-4 py-3 rounded-lg my-6 text-base">{error}</div>} {renderTripDetails()}</div> );
+                    case 'explore': return <ExplorePage allBusData={allBusData} />;
+                    case 'upload': 
+                        return <UploadPage onSubmitData={handleUploadSubmit} initialData={editingTrip} onUpdateData={handleUpdateTrip} allBusData={allBusData} />;
+                    case 'profile':
+                        if (!authChecked) { return <div className="text-center mt-10 text-lg">Loading Account...</div>; }
+                        if (!user) return <AuthPage onLogin={handleEmailLogin} onRegister={handleRegister} />;
+                        const mySubmissions = allBusData.filter(trip => trip.userId === user.uid);
+                        return <ProfilePage user={user} userSubmissions={mySubmissions} onAvatarChange={handleAvatarChange} onLogout={handleLogout} onEdit={handleEditTrip} onDelete={handleDeleteTrip} allBusData={allBusData} userStats={userStats} />;
+                    default: return <HomePage allBusData={allBusData} onSearch={handleSearch} savedRoutes={savedRoutes} onApplyRoute={handleApplyRoute} onDeleteRoute={handleDeleteRoute} />;
+                }
+            };
+
+            return (
+                <LanguageContext.Provider value={{ language, setLanguage, t }}>
+                    <ThemeContext.Provider value={{ darkMode, setDarkMode }}>
+                        {/* **மாற்றம் 2: பாதுகாப்பு கூறை இங்கே சேர்க்கவும்** */}
+                        <SecuritySetup />
+                        <div className="flex flex-col min-h-screen">
+                            <Header user={user} darkMode={darkMode} />
+                            <main className="flex-grow container mx-auto max-w-2xl p-4 pb-20 font-sans">
+                                {renderPage()}
+                            </main>
+                            <BottomNav currentPage={currentPage} onNavigate={handleNavigate} />
+                        </div>
+                    </ThemeContext.Provider>
+                </LanguageContext.Provider>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+
+        const style = document.createElement('style');
+        style.innerHTML = `@keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } } .animate-fade-in { animation: fadeIn 0.5s ease-out; }`;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
+```
